@@ -1,0 +1,220 @@
+[1788292325196ms] bridge: python dispatch thread started
+[1788292325197ms] bridge: controller worker started
+[1788292325197ms] native: macos lifecycle listener starting
+[1788292325197ms] native: sudden/automatic termination disabled
+[1788292325197ms] native: SIGTERM/SIGHUP handlers installed
+[1788292325197ms] native: clamshell (lid) interest registered
+[1788292325198ms] native: IORegisterForSystemPower succeeded
+[1788292325239ms] native: setActivationPolicy accessory accepted=true
+[1788292325239ms] native: NSApplication accessory delegate installed
+[1788292325240ms] native: NSWorkspace sleep/power-off observers registered
+[1788292325240ms] native: kAEQuitApplication handler installed
+[1788292325240ms] native: macos IOKit + NSWorkspace listeners registered
+[1788292325241ms] native: Darwin + distributed shutdown notifications registered
+[1788292325241ms] native: entering run loop (IOKit sleep + Darwin/distributed shutdown)
+[1788292336608ms] native: clamshell state change bits=0x3 closed=true will_sleep=true
+[1788292336635ms] native: sleep detected source=kIOPMMessageClamshellStateChange
+[1788292336645ms] native: IOPM assertion created type=PreventSystemSleep id=33292
+[1788292336648ms] native: IOPM assertion created type=PreventUserIdleSystemSleep id=33293
+[1788292336650ms] bridge: emitting lifecycle event source=kIOPMMessageClamshellStateChange event=sleep
+[1788292336650ms] bridge: platform event received event=sleep
+[1788292336651ms] bridge: waiting for synccomplete
+[1788292336652ms] bridge: worker ready for python dispatch
+[1788292336653ms] bridge: enqueueing python callback event=sleep
+[1788292336653ms] bridge: python callback enqueued event=sleep
+[1788292336653ms] native: IOKit power message 0xe0034140
+[1788292336655ms] native: kIOMessageSystemWillSleep
+[1788292336655ms] native: duplicate sleep ignored source=kIOMessageSystemWillSleep
+[1788292336656ms] native: kIOMessageSystemWillSleep waiting for synccomplete
+[1788292342671ms] bridge: sync wait finished completed=true
+[1788292342671ms] native: kIOMessageSystemWillSleep sync finished completed=true
+[1788292342671ms] native: IOPM assertion released id=33292
+[1788292342672ms] native: acknowledging sleep completed=true
+[1788292342672ms] native: IOPM assertion released id=33293
+[1788292342672ms] native: IOAllowPowerChange id=5636193 result=0
+[1788292342672ms] native: kIOMessageSystemWillSleep
+[1788292342673ms] native: sleep detected source=kIOMessageSystemWillSleep
+[1788292342673ms] native: IOPM assertion created type=PreventSystemSleep id=33306
+[1788292342673ms] native: IOPM assertion created type=PreventUserIdleSystemSleep id=33307
+[1788292342674ms] bridge: emitting lifecycle event source=kIOMessageSystemWillSleep event=sleep
+[1788292342674ms] bridge: platform event received event=sleep
+[1788292342674ms] bridge: waiting for synccomplete
+[1788292342674ms] bridge: worker ready for python dispatch
+[1788292342674ms] bridge: enqueueing python callback event=sleep
+[1788292342675ms] bridge: python callback enqueued event=sleep
+[1788292342675ms] native: kIOMessageSystemWillSleep waiting for synccomplete
+[1788292348685ms] bridge: sync wait finished completed=true
+[1788292348685ms] native: kIOMessageSystemWillSleep sync finished completed=true
+[1788292348685ms] native: acknowledging sleep completed=true
+[1788292348686ms] native: IOPM assertion released id=33306
+[1788292348686ms] native: IOAllowPowerChange id=6192356900 result=0
+[1788292348686ms] native: IOPM assertion released id=33307
+[1788292348687ms] native: IOKit power message 0xe0034150
+[1788292348687ms] native: clamshell state change bits=0x0 closed=false will_sleep=false
+[1788292348687ms] native: IOKit power message 0xe0034150
+[1788292366627ms] native: IOKit power message 0xe0000320
+[1788292369392ms] native: IOKit power message 0xe0000320
+[1788292369392ms] native: kIOMessageSystemHasPoweredOn
+[1788292369392ms] native: kIOMessageSystemHasPoweredOn
+[1788292369392ms] native: clamshell state change bits=0x1 closed=true will_sleep=false
+[1788292369392ms] native: sleep detected source=kIOPMMessageClamshellStateChange
+[1788292369404ms] native: hold_sleep_power failed: platform lifecycle error: IOPMAssertionCreateWithName(PreventSystemSleep) failed with code -536870199
+[1788292375604ms] native: shutdown source=SIGTERM
+[1788292375604ms] native: shutdown detected source=SIGTERM event=shutdown
+[1788292375604ms] bridge: emitting lifecycle event source=SIGTERM event=shutdown
+[1788292375605ms] bridge: platform event received event=shutdown
+[1788292375605ms] bridge: waiting for synccomplete
+[1788292375605ms] bridge: worker ready for python dispatch
+[1788292375605ms] bridge: enqueueing python callback event=shutdown
+[1788292375605ms] bridge: python callback enqueued event=shutdown
+[1788292375605ms] native: SIGTERM waiting for synccomplete
+[1788292987359ms] bridge: python dispatch thread started
+[1788292987360ms] bridge: controller worker started
+[1788292987360ms] native: macos lifecycle listener starting
+[1788292987360ms] native: sudden/automatic termination disabled
+[1788292987388ms] native: TransformProcessType UIElement status=0
+[1788292987388ms] native: SIGTERM/SIGHUP handlers installed
+[1788292987388ms] native: clamshell (lid) interest registered
+[1788292987388ms] native: IORegisterForSystemPower succeeded
+[1788292987397ms] native: TransformProcessType UIElement status=-50
+[1788292987397ms] native: setActivationPolicy accessory accepted=false
+[1788292987398ms] native: NSApplication accessory delegate installed
+[1788292987399ms] native: NSWorkspace sleep/power-off observers registered
+[1788292987399ms] native: kAEQuitApplication handler installed
+[1788292987399ms] native: macos IOKit + NSWorkspace listeners registered
+[1788292987399ms] native: Darwin + distributed shutdown notifications registered
+[1788292987399ms] native: entering run loop (IOKit sleep + AppKit/Darwin shutdown)
+[1788292987399ms] native: loginwindow notify(3) tokens registered
+[1788293004978ms] native: clamshell state change bits=0x3 closed=true will_sleep=true
+[1788293005004ms] native: sleep detected source=kIOPMMessageClamshellStateChange
+[1788293005017ms] native: IOPM assertion created type=PreventSystemSleep id=33278
+[1788293005021ms] native: IOPM assertion created type=PreventUserIdleSystemSleep id=33279
+[1788293005022ms] bridge: emitting lifecycle event source=kIOPMMessageClamshellStateChange event=sleep
+[1788293005023ms] bridge: platform event received event=sleep
+[1788293005023ms] bridge: waiting for synccomplete
+[1788293005033ms] bridge: worker ready for python dispatch
+[1788293005034ms] bridge: enqueueing python callback event=sleep
+[1788293005034ms] bridge: python callback enqueued event=sleep
+[1788293005035ms] native: IOKit power message 0xe0034140
+[1788293005036ms] native: kIOMessageSystemWillSleep
+[1788293005043ms] native: duplicate sleep ignored source=kIOMessageSystemWillSleep
+[1788293005043ms] native: kIOMessageSystemWillSleep waiting for synccomplete
+[1788293011058ms] bridge: sync wait finished completed=true
+[1788293011059ms] native: kIOMessageSystemWillSleep sync finished completed=true
+[1788293011059ms] native: IOPM assertion released id=33278
+[1788293011060ms] native: acknowledging sleep completed=true
+[1788293011060ms] native: IOPM assertion released id=33279
+[1788293011060ms] native: IOAllowPowerChange id=5636193 result=0
+[1788293011061ms] native: kIOMessageSystemWillSleep
+[1788293011061ms] native: sleep detected source=kIOMessageSystemWillSleep
+[1788293011062ms] native: IOPM assertion created type=PreventSystemSleep id=33292
+[1788293011062ms] native: IOPM assertion created type=PreventUserIdleSystemSleep id=33293
+[1788293011062ms] bridge: emitting lifecycle event source=kIOMessageSystemWillSleep event=sleep
+[1788293011063ms] bridge: platform event received event=sleep
+[1788293011063ms] bridge: waiting for synccomplete
+[1788293011063ms] bridge: worker ready for python dispatch
+[1788293011063ms] bridge: enqueueing python callback event=sleep
+[1788293011064ms] bridge: python callback enqueued event=sleep
+[1788293011064ms] native: kIOMessageSystemWillSleep waiting for synccomplete
+[1788293017073ms] bridge: sync wait finished completed=true
+[1788293017074ms] native: kIOMessageSystemWillSleep sync finished completed=true
+[1788293017074ms] native: acknowledging sleep completed=true
+[1788293017074ms] native: IOPM assertion released id=33292
+[1788293017075ms] native: IOAllowPowerChange id=6151167524 result=0
+[1788293017075ms] native: IOPM assertion released id=33293
+[1788293017075ms] native: IOKit power message 0xe0034150
+[1788293017076ms] native: clamshell state change bits=0x0 closed=false will_sleep=false
+[1788293017076ms] native: IOKit power message 0xe0034150
+[1788293035004ms] native: IOKit power message 0xe0000320
+[1788293035008ms] native: IOKit power message 0xe0000320
+[1788293035014ms] native: kIOMessageSystemHasPoweredOn
+[1788293035027ms] native: kIOMessageSystemHasPoweredOn
+[1788293059996ms] native: notify(3) fired name=com.apple.system.loginwindow.shutdownInitiated
+[1788293059996ms] native: shutdown source=com.apple.system.loginwindow.shutdownInitiated
+[1788293059996ms] native: shutdown detected source=com.apple.system.loginwindow.shutdownInitiated event=shutdown
+[1788293059996ms] bridge: emitting lifecycle event source=com.apple.system.loginwindow.shutdownInitiated event=shutdown
+[1788293059997ms] bridge: platform event received event=shutdown
+[1788293059997ms] bridge: waiting for synccomplete
+[1788293059997ms] bridge: worker ready for python dispatch
+[1788293059997ms] bridge: enqueueing python callback event=shutdown
+[1788293059997ms] bridge: python callback enqueued event=shutdown
+[1788293059998ms] native: com.apple.system.loginwindow.shutdownInitiated waiting for synccomplete
+[1788293063502ms] native: clamshell state change bits=0x3 closed=true will_sleep=true
+[1788293063503ms] native: sleep detected source=kIOPMMessageClamshellStateChange
+[1788293063504ms] native: hold_sleep_power failed: platform lifecycle error: IOPMAssertionCreateWithName(PreventSystemSleep) failed with code -536870199
+[1788293068552ms] bridge: sync wait finished completed=true
+[1788293068552ms] native: com.apple.system.loginwindow.shutdownInitiated sync finished completed=true
+[1788293508316ms] bridge: python dispatch thread started
+[1788293508316ms] bridge: controller worker started
+[1788293508316ms] native: macos lifecycle listener starting
+[1788293508317ms] native: sudden/automatic termination disabled
+[1788293508346ms] native: TransformProcessType UIElement status=0
+[1788293508346ms] native: SIGTERM/SIGHUP handlers installed
+[1788293508346ms] native: clamshell (lid) interest registered
+[1788293508347ms] native: IORegisterForSystemPower succeeded
+[1788293508359ms] native: TransformProcessType UIElement status=-50
+[1788293508359ms] native: setActivationPolicy accessory accepted=false
+[1788293508359ms] native: NSApplication accessory delegate installed
+[1788293508360ms] native: NSWorkspace sleep/power-off observers registered
+[1788293508360ms] native: kAEQuitApplication handler installed
+[1788293508361ms] native: macos IOKit + NSWorkspace listeners registered
+[1788293508361ms] native: Darwin + distributed shutdown notifications registered
+[1788293508361ms] native: entering run loop (IOKit sleep + AppKit/Darwin shutdown)
+[1788293508361ms] native: loginwindow notify(3) tokens registered
+[1788293550505ms] native: clamshell state change bits=0x3 closed=true will_sleep=true
+[1788293550530ms] native: sleep detected source=kIOPMMessageClamshellStateChange
+[1788293550541ms] native: IOPM assertion created type=PreventSystemSleep id=33281
+[1788293550542ms] native: IOPM assertion created type=PreventUserIdleSystemSleep id=33282
+[1788293550544ms] bridge: emitting lifecycle event source=kIOPMMessageClamshellStateChange event=sleep
+[1788293550545ms] bridge: platform event received event=sleep
+[1788293550546ms] bridge: waiting for synccomplete
+[1788293550547ms] bridge: worker ready for python dispatch
+[1788293550547ms] bridge: enqueueing python callback event=sleep
+[1788293550548ms] bridge: python callback enqueued event=sleep
+[1788293550548ms] native: IOKit power message 0xe0034140
+[1788293550549ms] native: kIOMessageSystemWillSleep
+[1788293550549ms] native: duplicate sleep ignored source=kIOMessageSystemWillSleep
+[1788293550549ms] native: kIOMessageSystemWillSleep waiting for synccomplete
+[1788293556558ms] bridge: sync wait finished completed=true
+[1788293556559ms] native: kIOMessageSystemWillSleep sync finished completed=true
+[1788293556559ms] native: acknowledging sleep completed=true
+[1788293556559ms] native: IOPM assertion released id=33281
+[1788293556559ms] native: IOAllowPowerChange id=5636195 result=0
+[1788293556559ms] native: IOPM assertion released id=33282
+[1788293556559ms] native: kIOMessageSystemWillSleep
+[1788293556560ms] native: sleep detected source=kIOMessageSystemWillSleep
+[1788293556560ms] native: IOPM assertion created type=PreventSystemSleep id=33295
+[1788293556560ms] native: IOPM assertion created type=PreventUserIdleSystemSleep id=33296
+[1788293556560ms] bridge: emitting lifecycle event source=kIOMessageSystemWillSleep event=sleep
+[1788293556560ms] bridge: platform event received event=sleep
+[1788293556561ms] bridge: waiting for synccomplete
+[1788293556561ms] bridge: worker ready for python dispatch
+[1788293556561ms] bridge: enqueueing python callback event=sleep
+[1788293556561ms] bridge: python callback enqueued event=sleep
+[1788293556561ms] native: kIOMessageSystemWillSleep waiting for synccomplete
+[1788293562571ms] bridge: sync wait finished completed=true
+[1788293562571ms] native: kIOMessageSystemWillSleep sync finished completed=true
+[1788293562571ms] native: acknowledging sleep completed=true
+[1788293562571ms] native: IOPM assertion released id=33295
+[1788293562571ms] native: IOAllowPowerChange id=6123953700 result=0
+[1788293562572ms] native: IOPM assertion released id=33296
+[1788293562572ms] native: IOKit power message 0xe0034150
+[1788293562572ms] native: clamshell state change bits=0x0 closed=false will_sleep=false
+[1788293562572ms] native: IOKit power message 0xe0034150
+[1788293580526ms] native: IOKit power message 0xe0000320
+[1788293580529ms] native: IOKit power message 0xe0000320
+[1788293580545ms] native: kIOMessageSystemHasPoweredOn
+[1788293580550ms] native: kIOMessageSystemHasPoweredOn
+[1788293584192ms] native: clamshell state change bits=0x3 closed=true will_sleep=true
+[1788293584192ms] native: sleep detected source=kIOPMMessageClamshellStateChange
+[1788293584192ms] native: hold_sleep_power failed: platform lifecycle error: IOPMAssertionCreateWithName(PreventSystemSleep) failed with code -536870199
+[1788293587105ms] native: clamshell state change bits=0x2 closed=false will_sleep=true
+[1788293606488ms] native: shutdown source=SIGTERM
+[1788293606489ms] native: shutdown detected source=SIGTERM event=shutdown
+[1788293606490ms] bridge: emitting lifecycle event source=SIGTERM event=shutdown
+[1788293606490ms] bridge: platform event received event=shutdown
+[1788293606491ms] bridge: waiting for synccomplete
+[1788293606492ms] bridge: worker ready for python dispatch
+[1788293606492ms] bridge: enqueueing python callback event=shutdown
+[1788293606493ms] bridge: python callback enqueued event=shutdown
+[1788293606494ms] native: SIGTERM waiting for synccomplete

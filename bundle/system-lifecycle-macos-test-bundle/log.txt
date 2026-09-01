@@ -1,0 +1,27 @@
+=== lifecycle test started, timestamp=2026-09-01 20:11:48 UTC ===
+running, timestamp=2026-09-01 20:11:48 UTC pid=3244
+lifecycle listener started — log file: /Users/himanshusingh/system-lifecycle-extension/bundle/system-lifecycle-macos-test-bundle/log.txt
+Apple menu -> Shut Down, or close the lid, then check log.txt after wake/reboot
+running, timestamp=2026-09-01 20:11:48 UTC
+running, timestamp=2026-09-01 20:11:58 UTC
+running, timestamp=2026-09-01 20:12:08 UTC
+running, timestamp=2026-09-01 20:12:18 UTC
+running, timestamp=2026-09-01 20:12:28 UTC
+event detected: type=sleep, os_timestamp=1788293550, now=2026-09-01 20:12:30 UTC
+waiting for 6 seconds, timestamp=2026-09-01 20:12:30 UTC
+wait complete, timestamp=2026-09-01 20:12:36 UTC
+synccomplete called, returned=True, timestamp=2026-09-01 20:12:36 UTC
+lifecycle guard released — OS may continue shutdown/sleep
+event detected: type=sleep, os_timestamp=1788293556, now=2026-09-01 20:12:36 UTC
+waiting for 6 seconds, timestamp=2026-09-01 20:12:36 UTC
+running, timestamp=2026-09-01 20:12:38 UTC
+wait complete, timestamp=2026-09-01 20:12:42 UTC
+synccomplete called, returned=True, timestamp=2026-09-01 20:12:42 UTC
+lifecycle guard released — OS may continue shutdown/sleep
+running, timestamp=2026-09-01 20:12:48 UTC
+running, timestamp=2026-09-01 20:12:58 UTC
+running, timestamp=2026-09-01 20:13:08 UTC
+running, timestamp=2026-09-01 20:13:18 UTC
+event detected: type=shutdown, os_timestamp=1788293606, now=2026-09-01 20:13:26 UTC
+waiting for 6 seconds, timestamp=2026-09-01 20:13:26 UTC
+running, timestamp=2026-09-01 20:13:28 UTC

@@ -1,0 +1,67 @@
+System Lifecycle Extension — macOS Test Bundle
+================================================
+
+Requirements
+------------
+- macOS (Intel or Apple Silicon)
+- Python matching the wheel tag. This folder's wheel is cp314 (CPython 3.14).
+  For CPython 3.10 use: ../system-lifecycle-macos-py310-test-bundle
+
+Homebrew Python cannot install wheels system-wide. Use the bundle venv.
+
+Install
+-------
+1. Open Terminal.
+
+2. Go to this folder:
+
+   cd /path/to/system-lifecycle-extension/bundle/system-lifecycle-macos-test-bundle
+
+3. Create a local venv and install the wheel (no Rust required):
+
+   chmod +x install.sh run_test_detached.sh
+   ./install.sh
+
+   To pick the interpreter used for the venv (must still match the wheel tag):
+
+   PYTHON=python3.14 ./install.sh
+
+Run the test (recommended — detached)
+-------------------------------------
+Do NOT run `python3 test_lifecycle.py` inside Cursor for shutdown tests.
+
+Instead, start detached:
+
+   ./run_test_detached.sh
+
+If `.venv` is missing, `run_test_detached.sh` runs `install.sh` first.
+
+Then use Apple menu -> Shut Down, or close the lid.
+
+What you should see
+-------------------
+- After ~6 seconds of sync, shutdown/sleep continues
+- log.txt shows synccomplete returned=True
+- For shutdown, the test process exits (no further "running" lines)
+
+Validated
+---------
+- Lid close / sleep: synccomplete then IOAllowPowerChange
+- Apple menu Shut Down: loginwindow shutdownInitiated, then synccomplete
+
+Logs
+----
+- log.txt — Python test output
+- lifecycle_native.log — native bridge
+  shutdown: notify(3) fired ... shutdownInitiated ... sync finished completed=true
+  sleep: kIOMessageSystemWillSleep ... IOAllowPowerChange
+
+Interactive mode (debug only)
+-----------------------------
+   .venv/bin/python test_lifecycle.py
+
+Notes
+-----
+- max_wait_seconds is 90 in the script (must exceed the 6-second sync wait).
+- Press Ctrl+C to stop when running interactively in a console.
+- Kill a leftover test: kill "$(cat .lifecycle_test.lock)"

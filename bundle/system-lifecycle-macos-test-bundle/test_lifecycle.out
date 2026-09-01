@@ -1,0 +1,46 @@
+[2m2026-09-01T20:11:48.316763Z[0m [32m INFO[0m lifecycle listener started [3mplatform[0m[2m=[0m"macos"
+running, timestamp=2026-09-01 20:11:48 UTC pid=3244
+lifecycle listener started — log file: /Users/himanshusingh/system-lifecycle-extension/bundle/system-lifecycle-macos-test-bundle/log.txt
+Apple menu -> Shut Down, or close the lid, then check log.txt after wake/reboot
+running, timestamp=2026-09-01 20:11:48 UTC
+[2m2026-09-01T20:11:48.361134Z[0m [32m INFO[0m macos lifecycle notifications registered (shutdown + lid/sleep)
+running, timestamp=2026-09-01 20:11:58 UTC
+running, timestamp=2026-09-01 20:12:08 UTC
+running, timestamp=2026-09-01 20:12:18 UTC
+running, timestamp=2026-09-01 20:12:28 UTC
+[2m2026-09-01T20:12:30.534860Z[0m [32m INFO[0m sleep / lid notification received [3msource[0m[2m=[0m"kIOPMMessageClamshellStateChange"
+[2m2026-09-01T20:12:30.546373Z[0m [32m INFO[0m lifecycle event detected [3mplatform[0m[2m=[0m"macos" [3mevent[0m[2m=[0m"sleep"
+[2m2026-09-01T20:12:30.546401Z[0m [32m INFO[0m lifecycle guard acquired [3mevent[0m[2m=[0m"sleep"
+[2m2026-09-01T20:12:30.546991Z[0m [32m INFO[0m waiting for synccomplete
+event detected: type=sleep, os_timestamp=1788293550, now=2026-09-01 20:12:30 UTC
+waiting for 6 seconds, timestamp=2026-09-01 20:12:30 UTC
+wait complete, timestamp=2026-09-01 20:12:36 UTC
+synccomplete called, returned=True, timestamp=2026-09-01 20:12:36 UTC
+lifecycle guard released — OS may continue shutdown/sleep
+[2m2026-09-01T20:12:36.558998Z[0m [32m INFO[0m synccomplete received [3mevent[0m[2m=[0m"sleep"
+[2m2026-09-01T20:12:36.559914Z[0m [32m INFO[0m lifecycle guard released [3mevent[0m[2m=[0m"sleep"
+[2m2026-09-01T20:12:36.560239Z[0m [32m INFO[0m sleep / lid notification received [3msource[0m[2m=[0m"kIOMessageSystemWillSleep"
+[2m2026-09-01T20:12:36.561076Z[0m [32m INFO[0m lifecycle event detected [3mplatform[0m[2m=[0m"macos" [3mevent[0m[2m=[0m"sleep"
+[2m2026-09-01T20:12:36.561090Z[0m [32m INFO[0m lifecycle guard acquired [3mevent[0m[2m=[0m"sleep"
+[2m2026-09-01T20:12:36.561239Z[0m [32m INFO[0m waiting for synccomplete
+event detected: type=sleep, os_timestamp=1788293556, now=2026-09-01 20:12:36 UTC
+waiting for 6 seconds, timestamp=2026-09-01 20:12:36 UTC
+running, timestamp=2026-09-01 20:12:38 UTC
+wait complete, timestamp=2026-09-01 20:12:42 UTC
+synccomplete called, returned=True, timestamp=2026-09-01 20:12:42 UTC
+lifecycle guard released — OS may continue shutdown/sleep
+[2m2026-09-01T20:12:42.571373Z[0m [32m INFO[0m synccomplete received [3mevent[0m[2m=[0m"sleep"
+[2m2026-09-01T20:12:42.572251Z[0m [32m INFO[0m lifecycle guard released [3mevent[0m[2m=[0m"sleep"
+running, timestamp=2026-09-01 20:12:48 UTC
+running, timestamp=2026-09-01 20:12:58 UTC
+[2m2026-09-01T20:13:04.192902Z[0m [32m INFO[0m sleep / lid notification received [3msource[0m[2m=[0m"kIOPMMessageClamshellStateChange"
+[2m2026-09-01T20:13:04.193304Z[0m [33m WARN[0m failed to create macOS sleep assertion [3merror[0m[2m=[0mplatform lifecycle error: IOPMAssertionCreateWithName(PreventSystemSleep) failed with code -536870199 [3msource[0m[2m=[0m"kIOPMMessageClamshellStateChange"
+running, timestamp=2026-09-01 20:13:08 UTC
+running, timestamp=2026-09-01 20:13:18 UTC
+[2m2026-09-01T20:13:26.490150Z[0m [32m INFO[0m shutdown notification received [3msource[0m[2m=[0m"SIGTERM" [3mevent[0m[2m=[0m"shutdown"
+[2m2026-09-01T20:13:26.491506Z[0m [32m INFO[0m lifecycle event detected [3mplatform[0m[2m=[0m"macos" [3mevent[0m[2m=[0m"shutdown"
+[2m2026-09-01T20:13:26.491530Z[0m [32m INFO[0m lifecycle guard acquired [3mevent[0m[2m=[0m"shutdown"
+[2m2026-09-01T20:13:26.492187Z[0m [32m INFO[0m waiting for synccomplete
+event detected: type=shutdown, os_timestamp=1788293606, now=2026-09-01 20:13:26 UTC
+waiting for 6 seconds, timestamp=2026-09-01 20:13:26 UTC
+running, timestamp=2026-09-01 20:13:28 UTC
