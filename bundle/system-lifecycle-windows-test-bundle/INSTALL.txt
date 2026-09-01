@@ -1,0 +1,56 @@
+System Lifecycle Extension — Windows Test Bundle
+================================================
+
+Requirements
+------------
+- Windows 10 or 11 (64-bit)
+- Python 3.14 (must match wheel tag cp314)
+
+Install
+-------
+1. Open Command Prompt or PowerShell.
+
+2. Go to this folder (IMPORTANT on CMD use /d when changing drive):
+
+   cd /d D:\rust\system-lifecycle-extension\bundle\system-lifecycle-windows-test-bundle
+
+3. Reinstall the extension (no Rust required):
+
+   py -3.14 -m pip install --force-reinstall wheels\system_lifecycle-0.1.0-cp314-cp314-win_amd64.whl
+
+Run the test (recommended — detached)
+-------------------------------------
+Do NOT run `py test_lifecycle.py` inside CMD/Cursor for shutdown tests.
+That ties CMD/Cursor into the shutdown UI alongside your app.
+
+Instead, start detached (pythonw, no console parent):
+
+   powershell -ExecutionPolicy Bypass -File run_test_detached.ps1
+
+   Or double-click / run:
+
+   run_test_detached.cmd
+
+Then use Start menu -> Shut down.
+
+What you should see
+-------------------
+- Shutdown screen lists **System Lifecycle Sync** (or pythonw) with
+  "Application synchronization in progress"
+- After ~6 seconds, shutdown continues automatically (no "Shut down anyway")
+- log.txt shows synccomplete returned=True
+
+Logs
+----
+- log.txt — Python test output
+- lifecycle_native.log — native bridge (look for WM_ENDSESSION sync finished completed=true)
+
+Interactive mode (debug only)
+-----------------------------
+   py -3.14 test_lifecycle.py
+
+Notes
+-----
+- max_wait_seconds is 90 in the script (must exceed the 6-second sync wait).
+- Cursor may still appear in the shutdown list if it has unsaved editor state — that is separate from this extension.
+- Press Ctrl+C to stop when running interactively in a console.

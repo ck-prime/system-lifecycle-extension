@@ -1,0 +1,9 @@
+/target
+/dist
+*.egg-info
+.venv/
+__pycache__/
+*.pyc
+.mypy_cache/
+.pytest_cache/
+*.whl

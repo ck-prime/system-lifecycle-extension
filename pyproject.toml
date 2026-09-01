@@ -1,0 +1,35 @@
+[build-system]
+requires = ["maturin>=1.7,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "system-lifecycle"
+version = "0.1.0"
+description = "Cross-platform OS lifecycle detection and sync coordination for Python"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Rust",
+    "Topic :: System :: Operating System",
+]
+
+[tool.maturin]
+module-name = "system_lifecycle"
+features = ["pyo3/extension-module"]
+
+[tool.maturin.environment]
+PYO3_USE_ABI3_FORWARD_COMPATIBILITY = "1"
+
+[tool.pytest.ini_options]
+testpaths = ["tests/integration"]
+python_files = ["test_*.py"]

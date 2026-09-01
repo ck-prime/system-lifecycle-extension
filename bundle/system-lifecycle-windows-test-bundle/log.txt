@@ -1,0 +1,12 @@
+=== lifecycle test started, timestamp=2026-09-01 18:10:42 UTC ===
+running, timestamp=2026-09-01 18:10:42 UTC pid=3988
+lifecycle listener started — log file: D:\rust\system-lifecycle-extension\bundle\system-lifecycle-windows-test-bundle\log.txt
+trigger shutdown or sleep manually, then check log.txt after reboot
+running, timestamp=2026-09-01 18:10:42 UTC
+running, timestamp=2026-09-01 18:10:52 UTC
+running, timestamp=2026-09-01 18:11:02 UTC
+event detected: type=shutdown, os_timestamp=1788286265, now=2026-09-01 18:11:05 UTC
+waiting for 6 seconds, timestamp=2026-09-01 18:11:05 UTC
+wait complete, timestamp=2026-09-01 18:11:11 UTC
+synccomplete called, returned=True, timestamp=2026-09-01 18:11:11 UTC
+lifecycle guard released — OS may continue shutdown/sleep

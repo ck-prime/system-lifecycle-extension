@@ -1,0 +1,138 @@
+native: lifecycle listener starting
+native: SetConsoleCtrlHandler registered
+native: lifecycle window created and shown (minimized/off-screen)
+native: shutdown detected source=WM_QUERYENDSESSION event=shutdown
+native: ShutdownBlockReasonCreate succeeded
+native: shutdown event queued to python bridge
+native: WM_ENDSESSION ending=true
+[1788283700509ms] native: lifecycle listener starting
+[1788283700509ms] bridge: controller worker started
+[1788283700513ms] native: SetConsoleCtrlHandler registered
+[1788283700516ms] native: lifecycle window created and shown (minimized/off-screen)
+[1788283710256ms] native: shutdown detected source=WM_QUERYENDSESSION event=shutdown
+[1788283710257ms] native: ShutdownBlockReasonCreate succeeded
+[1788283710257ms] native: shutdown event queued to python bridge
+[1788283710257ms] bridge: platform event received event=shutdown
+[1788283710258ms] native: WM_ENDSESSION ending=true
+[1788283710258ms] bridge: dispatching python callback event=shutdown
+[1788284052187ms] bridge: python dispatch thread started
+[1788284052188ms] native: lifecycle listener starting
+[1788284052188ms] bridge: controller worker started
+[1788284052192ms] native: SetConsoleCtrlHandler registered
+[1788284052195ms] native: lifecycle window created and shown (minimized/off-screen)
+[1788284065852ms] native: shutdown detected source=WM_QUERYENDSESSION event=shutdown
+[1788284065853ms] native: ShutdownBlockReasonCreate succeeded
+[1788284065853ms] native: shutdown event queued to python bridge
+[1788284065853ms] bridge: platform event received event=shutdown
+[1788284065854ms] native: WM_ENDSESSION ending=true
+[1788284453089ms] bridge: python dispatch thread started
+[1788284453089ms] native: lifecycle listener starting
+[1788284453089ms] bridge: controller worker started
+[1788284453094ms] native: SetConsoleCtrlHandler registered
+[1788284453097ms] native: lifecycle window created and shown (minimized/off-screen)
+[1788284466281ms] native: shutdown detected source=WM_QUERYENDSESSION event=shutdown
+[1788284466282ms] native: ShutdownBlockReasonCreate succeeded
+[1788284466283ms] bridge: emitting lifecycle event source=WM_QUERYENDSESSION event=shutdown
+[1788284466284ms] bridge: platform event received event=shutdown
+[1788284466284ms] bridge: worker ready for python dispatch
+[1788284466285ms] bridge: enqueueing python callback event=shutdown
+[1788284466285ms] bridge: python callback enqueued event=shutdown
+[1788284466284ms] bridge: waiting for synccomplete
+[1788284466285ms] native: WM_ENDSESSION ending=true
+[1788284885145ms] bridge: python dispatch thread started
+[1788284885145ms] native: lifecycle listener starting
+[1788284885145ms] bridge: controller worker started
+[1788284885148ms] native: SetConsoleCtrlHandler registered
+[1788284885151ms] native: lifecycle window created (hidden until shutdown block)
+[1788284893917ms] native: shutdown detected source=WM_QUERYENDSESSION event=shutdown
+[1788284893918ms] native: ShutdownBlockReasonQuery confirmed reason="Application synchronization in progress\0"
+[1788284893918ms] native: ShutdownBlockReasonCreate succeeded
+[1788284893919ms] bridge: emitting lifecycle event source=WM_QUERYENDSESSION event=shutdown
+[1788284893919ms] bridge: platform event received event=shutdown
+[1788284893919ms] bridge: waiting for synccomplete
+[1788284893919ms] bridge: worker ready for python dispatch
+[1788284893919ms] bridge: enqueueing python callback event=shutdown
+[1788284893920ms] bridge: python callback enqueued event=shutdown
+[1788284893920ms] native: WM_QUERYENDSESSION returning allow=false
+[1788284899922ms] bridge: sync wait finished completed=true
+[1788284922058ms] native: WM_ENDSESSION ending=true
+[1788285389264ms] bridge: python dispatch thread started
+[1788285389264ms] native: lifecycle listener starting
+[1788285389264ms] bridge: controller worker started
+[1788285389267ms] native: SetConsoleCtrlHandler registered
+[1788285389270ms] native: lifecycle window created (hidden until shutdown block)
+[1788285397060ms] native: shutdown detected source=WM_QUERYENDSESSION event=shutdown
+[1788285397062ms] native: ShutdownBlockReasonQuery confirmed reason="Application synchronization in progress"
+[1788285397062ms] native: ShutdownBlockReasonCreate succeeded
+[1788285397062ms] bridge: emitting lifecycle event source=WM_QUERYENDSESSION event=shutdown
+[1788285397063ms] bridge: platform event received event=shutdown
+[1788285397063ms] bridge: waiting for synccomplete
+[1788285397064ms] bridge: worker ready for python dispatch
+[1788285397064ms] bridge: enqueueing python callback event=shutdown
+[1788285397064ms] bridge: python callback enqueued event=shutdown
+[1788285397064ms] native: WM_QUERYENDSESSION returning allow=false
+[1788285403066ms] bridge: sync wait finished completed=true
+[1788285403068ms] native: SeShutdownPrivilege enabled for shutdown resume
+[1788285403071ms] native: InitiateShutdownW succeeded event=shutdown
+[1788285413845ms] native: WM_ENDSESSION ending=false
+[1788285737054ms] bridge: controller worker exiting
+[1788285737054ms] native: lifecycle listener stopped
+[1788285737055ms] bridge: python dispatch thread stopped
+[1788285742570ms] bridge: python dispatch thread started
+[1788285742571ms] native: lifecycle listener starting
+[1788285742571ms] bridge: controller worker started
+[1788285742574ms] native: no console window; skipping SetConsoleCtrlHandler
+[1788285742576ms] native: lifecycle window created (hidden until shutdown block)
+[1788285759294ms] bridge: python dispatch thread started
+[1788285759295ms] native: lifecycle listener starting
+[1788285759295ms] bridge: controller worker started
+[1788285759298ms] native: SetConsoleCtrlHandler registered
+[1788285759300ms] native: lifecycle window created (hidden until shutdown block)
+[[1788285768122ms] 1788285768122native: shutdown detected source=WM_QUERYENDSESSION event=shutdownms] 
+native: shutdown detected source=WM_QUERYENDSESSION event=shutdown
+[[17882857681231788285768123ms] ms] native: ShutdownBlockReasonQuery confirmed reason="Application synchronization in progress"native: ShutdownBlockReasonQuery confirmed reason="Application synchronization in progress"
+
+[1788285768124ms] [native: ShutdownBlockReasonCreate succeeded1788285768124ms] 
+native: ShutdownBlockReasonCreate succeeded
+[1788285768124ms] bridge: emitting lifecycle event source=WM_QUERYENDSESSION event=shutdown
+[1788285768124ms] bridge: platform event received event=shutdown
+[1788285768124ms] bridge: emitting lifecycle event source=WM_QUERYENDSESSION event=shutdown
+[1788285768124ms] bridge: waiting for synccomplete
+[1788285768124ms] bridge: worker ready for python dispatch
+[1788285768125ms] bridge: platform event received event=shutdown
+[1788285768125ms] bridge: enqueueing python callback event=shutdown
+[1788285768125[ms] 1788285768125bridge: worker ready for python dispatchms] 
+bridge: python callback enqueued event=shutdown
+[1788285768125[ms] 1788285768125bridge: waiting for synccompletems] 
+bridge: enqueueing python callback event=shutdown
+[1788285768125ms] bridge: python callback enqueued event=shutdown
+[1788285768126ms] native: WM_QUERYENDSESSION returning allow=true handled=true
+[1788285768126ms] native: WM_QUERYENDSESSION returning allow=true handled=true
+[[17882857681261788285768126ms] ms] native: WM_ENDSESSION ending=truenative: WM_ENDSESSION ending=true
+
+[1788285768126ms] native: WM_ENDSESSION waiting for synccomplete
+[1788285768127ms] native: WM_ENDSESSION waiting for synccomplete
+[1788285774127ms] native: WM_ENDSESSION sync finished completed=true
+[1788285774127ms] bridge: sync wait finished completed=true
+[1788285774128ms] native: WM_ENDSESSION sync finished completed=true
+[1788285774128ms] bridge: sync wait finished completed=true
+[1788286242110ms] bridge: python dispatch thread started
+[1788286242110ms] native: lifecycle listener starting
+[1788286242110ms] bridge: controller worker started
+[1788286242114ms] native: no console window; skipping SetConsoleCtrlHandler
+[1788286242116ms] native: lifecycle window created (hidden until shutdown block)
+[1788286265411ms] native: shutdown detected source=WM_QUERYENDSESSION event=shutdown
+[1788286265412ms] native: ShutdownBlockReasonQuery confirmed reason="Application synchronization in progress"
+[1788286265412ms] native: ShutdownBlockReasonCreate succeeded
+[1788286265412ms] bridge: emitting lifecycle event source=WM_QUERYENDSESSION event=shutdown
+[1788286265413ms] bridge: platform event received event=shutdown
+[1788286265413ms] bridge: worker ready for python dispatch
+[1788286265413ms] bridge: enqueueing python callback event=shutdown
+[1788286265413ms] bridge: python callback enqueued event=shutdown
+[1788286265413ms] bridge: waiting for synccomplete
+[1788286265413ms] native: WM_QUERYENDSESSION returning allow=true handled=true
+[1788286265415ms] native: WM_ENDSESSION ending=true
+[1788286265415ms] native: WM_ENDSESSION waiting for synccomplete
+[1788286271415ms] bridge: sync wait finished completed=true
+[1788286271415ms] native: WM_ENDSESSION sync finished completed=true
+[1788286271416ms] native: PostQuitMessage sent after shutdown sync
