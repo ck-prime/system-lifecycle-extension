@@ -8,18 +8,17 @@ It is **not** a standalone tracker application. Python owns business logic; Rust
 
 ## High-Level Flow
 
-```
+```text
 OS lifecycle event
        │
        ▼
 Platform listener (background thread)
        │
        ▼
-LifecycleController state machine
+emit_lifecycle_event: worker enters WaitingForSync → dispatch Python callback
        │
-       ├── acquire platform guard/inhibitor
-       ├── dispatch Python callback (GIL held only for callback)
-       └── wait for synccomplete() OR timeout (NO GIL)
+       ▼
+LifecycleController worker: acquire guard → wait synccomplete() (no GIL)
        │
        ▼
 Release platform guard/inhibitor
@@ -28,21 +27,26 @@ Release platform guard/inhibitor
 OS transition continues
 ```
 
+On **Windows shutdown**, the message loop also **blocks on `WM_ENDSESSION`** until sync completes, then posts quit so the process can exit cleanly.
+
 ## Components
 
 | Layer | Responsibility |
 |-------|----------------|
-| `bridge/` | PyO3 bindings, `LifecycleManager`, Python callback dispatch |
+| `bridge/` | PyO3 bindings, `LifecycleManager`, `PythonDispatchThread` (callback queue) |
+| `lifecycle/dispatch.rs` | `emit_lifecycle_event`, rendezvous with worker ready signal |
+| `lifecycle/sync_wait.rs` | Condvar used by worker and Windows `WM_ENDSESSION` |
 | `lifecycle/` | State machine, event types, platform trait |
 | `lifecycle/linux/` | systemd-logind over D-Bus, delay inhibitors |
-| `lifecycle/macos/` | IOKit / NSWorkspace power notifications |
-| `lifecycle/windows/` | Hidden message window, session/power messages |
+| `lifecycle/macos/` | NSWorkspace notifications, IOPM assertions |
+| `lifecycle/windows/` | Hidden top-level window, session/power messages, shutdown block reason |
+| `native_log.rs` | Optional `lifecycle_native.log` for shutdown debugging |
 | `errors.rs` | Typed errors (`thiserror`) |
 | `logging.rs` | `tracing` initialization |
 
 ## State Machine
 
-```
+```text
 Idle
   │ platform event (single active session)
   ▼
@@ -58,51 +62,68 @@ Stopped (terminal, from manager.stop())
 
 Rules:
 
-- Only **one** active synchronization session at a time.
+- Only **one** active synchronization session at a time (per process).
 - Duplicate OS notifications while `WaitingForSync` are logged and ignored.
+- Windows adds a process-wide **shutdown handling** flag to ignore duplicate `WM_QUERYENDSESSION` delivery.
 - `synccomplete()` is **idempotent**; only the first call completes an active wait.
 - Callback exceptions are logged; the session remains until `synccomplete()` or timeout.
-- Timeout always releases the OS guard — shutdown/sleep is never blocked indefinitely.
+- Timeout always releases the OS guard.
 
 ## Threading & GIL Safety
 
-Three roles:
-
-1. **Platform listener thread** — blocks on OS APIs (D-Bus, Win32 message loop, CFRunLoop).
-2. **Controller worker thread** — owns the state machine, acquires/releases guards, waits on a `Condvar` for sync completion.
-3. **Python threads** — run the user callback and may call `synccomplete()`.
+| Thread | Role |
+|--------|------|
+| Platform listener | OS APIs (D-Bus, Win32 message loop, NSWorkspace observer) |
+| Controller worker | State machine, guard acquire/release, `sync_wait` (no GIL) |
+| Python dispatch thread | Runs user callback from a `queue.Queue` |
+| Python main / other | Application code; may call `synccomplete()` |
 
 Critical invariant: the controller worker **never** holds the Python GIL while waiting for `synccomplete()`.
 
 Callback dispatch:
 
-```
-worker ──► Python::attach ──► call callback ──► release GIL
-worker ──► condvar.wait(timeout)
-Python ──► synccomplete() ──► condvar.notify
-worker ──► release guard
+```text
+platform thread → emit_lifecycle_event → worker ready → enqueue to Python thread
+Python thread   → user callback(event)
+worker          → sync_wait.wait(timeout)   [no GIL]
+Python          → synccomplete() → notify
+worker          → release guard
 ```
 
 ## Platform Abstraction
 
 ```rust
 trait PlatformLifecycle: Send {
-    fn start(&mut self, events: Sender<PlatformEvent>) -> Result<()>;
+    fn start(
+        &mut self,
+        events: SyncSender<PlatformEvent>,
+        dispatcher: Arc<CallbackDispatcher>,
+        worker_ready: Receiver<()>,
+        sync_wait: Arc<SyncWait>,
+        max_wait: Duration,
+    ) -> Result<()>;
     fn stop(&mut self) -> Result<()>;
     fn acquire_guard(&self, event: LifecycleEventType) -> Result<PlatformGuard>;
 }
 ```
 
-`PlatformGuard` is RAII-friendly (fd on Linux, assertion on macOS, shutdown block reason on Windows) but the controller explicitly drops it after sync/timeout for clear logging.
+`PlatformGuard` releases OS-specific delay mechanisms after sync or timeout.
+
+## Windows shutdown sequence (validated)
+
+1. `WM_QUERYENDSESSION`: `ShutdownBlockReasonCreate`, emit event, return **TRUE**.
+2. Python callback runs on dispatch thread; worker waits on `sync_wait`.
+3. `WM_ENDSESSION` (ending): message loop waits on same `sync_wait`.
+4. `synccomplete()`: worker releases guard (`ShutdownBlockReasonDestroy`); ENDSESSION wait completes.
+5. Host process should **exit** so shutdown proceeds (test bundle uses `os._exit(0)`).
 
 ## Python API
 
 ```python
 from system_lifecycle import LifecycleManager
 
-manager = LifecycleManager(max_wait_seconds=15)
+manager = LifecycleManager(max_wait_seconds=90)
 manager.start(on_system_event)
-# ... application runs ...
 manager.synccomplete()  # returns True if a wait was active
 manager.stop()
 ```
@@ -115,9 +136,9 @@ Events expose `event.type` (`shutdown`, `reboot`, `sleep`, `hibernate`) and `eve
 |------|-------|------------|
 | Unit | State machine, mock platform | Yes |
 | Integration | Rust ↔ Python callback/synccomplete | Yes (mock platform) |
-| Real OS | Manual shutdown/sleep in VM | No (documented) |
+| Real OS | Manual shutdown/sleep | No |
 
-`MockLifecycle` injects synthetic events without touching the OS.
+Windows manual validation: `bundle/system-lifecycle-windows-test-bundle/` (see [testing.md](testing.md)).
 
 ## Build & Packaging
 
@@ -128,8 +149,8 @@ Events expose `event.type` (`shutdown`, `reboot`, `sleep`, `hibernate`) and `eve
 ## Security
 
 - No shell commands, no `sudo`, no modification of system shutdown configuration.
-- Logs contain lifecycle metadata only (platform, event type, state transitions).
+- Logs contain lifecycle metadata only.
 
 ## Platform Honesty
 
-Each OS provides different delay/veto semantics. See `docs/platform-support.md` for per-platform capabilities and limits.
+See [platform-support.md](platform-support.md) for per-OS capabilities, validated behavior, and limits.

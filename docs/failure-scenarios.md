@@ -15,7 +15,7 @@ The Python process must not crash.
 
 Behavior:
 
-1. Timeout fires (`max_wait_seconds`, default 15s).
+1. Timeout fires (`max_wait_seconds`).
 2. Rust logs timeout.
 3. OS guard/inhibitor is released.
 4. OS transition continues.
@@ -31,6 +31,13 @@ The extension never blocks shutdown/sleep indefinitely.
 
 - First event owns the synchronization cycle.
 - Additional events are logged and ignored until the current cycle completes.
+- On Windows, a process-wide shutdown flag ignores duplicate `WM_QUERYENDSESSION` in the same session.
+
+## Multiple test / app instances (Windows)
+
+- Each process registers its own shutdown block reason.
+- Running the test twice (e.g. detached + CMD) causes duplicate handlers and a cluttered shutdown UI.
+- Use a single-instance lock in the test script; production apps should enforce one listener per process.
 
 ## logind / D-Bus unavailable (Linux)
 
@@ -45,13 +52,20 @@ The extension never blocks shutdown/sleep indefinitely.
 
 ## Windows session without message pump
 
-- Hidden message window requires a running listener thread.
+- Hidden top-level window requires a running listener thread.
 - If window creation fails, errors are logged and lifecycle protection is unavailable.
+
+## Windows: sync completes but shutdown stalls
+
+If `synccomplete()` succeeds but the machine does not shut down:
+
+- The **host process may still be running** (e.g. main thread in an infinite loop).
+- Production apps should exit after shutdown/reboot sync so Windows can finish the session.
+- The test bundle calls `os._exit(0)` after sync as a reference pattern.
 
 ## Extension internal errors
 
 - Errors are converted to `RuntimeError` for Python API calls where appropriate.
-- Production code avoids panics in lifecycle paths.
 - Safest fallback: stop waiting after timeout and allow OS transition.
 
 ## Data safety principle

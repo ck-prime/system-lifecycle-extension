@@ -4,7 +4,9 @@ Library unit tests live alongside modules under `src/**`.
 
 Integration tests:
 
-- `tests/lifecycle_integration.rs` — mock lifecycle + Python callback flows
+- `tests/lifecycle_integration.rs` — mock lifecycle + Python callback flows (sync, timeout, exceptions, duplicate `synccomplete()`)
+
+Real OS lifecycle tests (shutdown/sleep) are manual only. Windows: see `bundle/system-lifecycle-windows-test-bundle/README.md`.
 
 Run:
 

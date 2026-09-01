@@ -2,26 +2,42 @@
 
 This document distinguishes **detection**, **delay**, **veto/cancellation**, and **honest limitations**.
 
-| Platform | Event | Detection API | Delay / veto mechanism | Max delay behavior | Limitations | Privileges |
-|----------|-------|---------------|------------------------|--------------------|-------------|------------|
-| Linux (Ubuntu 22.04+) | shutdown | logind `PrepareForShutdown` + `ScheduledShutdown` | logind **delay inhibitor** fd | Until fd closed or `max_wait_seconds` timeout in extension | Requires systemd-logind on system bus; headless/container environments may lack logind | Session user |
-| Linux | reboot | same as shutdown | same inhibitor (`what` includes reboot handling) | same | Reboot vs shutdown inferred from `ScheduledShutdown` when available | Session user |
-| Linux | sleep / lid close | logind `PrepareForSleep` | logind delay inhibitor (`what=sleep`) | same | Lid close usually maps to sleep, not shutdown; older systemd may report hibernate as sleep | Session user |
-| Linux | hibernate | `PrepareForSleep` + `SleepOperation` when available | logind delay inhibitor | same | Property may be absent on older systemd; event may appear as `sleep` | Session user |
-| macOS Intel/Apple Silicon | sleep | `NSWorkspaceWillSleepNotification` | `IOPMAssertion` prevent idle system sleep | Bounded by extension timeout + OS policy | Not identical to logind delay semantics | User session |
-| macOS | shutdown | `NSWorkspaceWillPowerOffNotification` | **No true shutdown inhibitor equivalent** | Notification only; extension timeout still applies to internal wait state | Cannot guarantee shutdown delay like Linux/Windows block reason | User session |
-| macOS | reboot | grouped with shutdown notification | notification only | same | same | User session |
-| Windows 10/11 | shutdown | `WM_QUERYENDSESSION` | `ShutdownBlockReasonCreate` | Until block reason destroyed or timeout | Must run in interactive session with message queue | User session |
-| Windows | reboot | `WM_QUERYENDSESSION` heuristics | `ShutdownBlockReasonCreate` | same | Reboot detection is best-effort via session parameters | User session |
-| Windows | sleep / hibernate | `WM_POWERBROADCAST` (`PBT_APMSUSPEND`) | `SetThreadExecutionState(ES_SYSTEM_REQUIRED)` | Temporary execution state hold + timeout | Hibernate vs sleep not always distinguishable | User session |
+| Platform | Event | Detection API | Delay / veto mechanism | Max delay behavior | Limitations | Privileges | Validated |
+|----------|-------|---------------|------------------------|--------------------|-------------|------------|-----------|
+| Linux (Ubuntu 22.04+) | shutdown | logind `PrepareForShutdown` + `ScheduledShutdown` | logind **delay inhibitor** fd | Until fd closed or `max_wait_seconds` timeout | Requires systemd-logind on system bus | Session user | Manual VM |
+| Linux | reboot | same as shutdown | same inhibitor | same | Reboot vs shutdown inferred when available | Session user | Manual VM |
+| Linux | sleep / lid | logind `PrepareForSleep` | logind delay inhibitor (`what=sleep`) | same | Lid close usually maps to sleep | Session user | Manual VM |
+| Linux | hibernate | `PrepareForSleep` + `SleepOperation` when available | logind delay inhibitor | same | May appear as `sleep` on older systemd | Session user | Manual VM |
+| macOS | sleep | `NSWorkspaceWillSleepNotification` | `IOPMAssertion` prevent idle sleep | Extension timeout + OS policy | Not identical to logind semantics | User session | Manual |
+| macOS | shutdown / reboot | `NSWorkspaceWillPowerOffNotification` | **Notification only** | Internal wait only | No true shutdown inhibitor like Linux/Windows | User session | Manual |
+| **Windows 10/11** | **shutdown** | `WM_QUERYENDSESSION` | `ShutdownBlockReasonCreate` + **`WM_ENDSESSION` hold** until sync | Until block reason destroyed, sync completes, or timeout | Must be the blocking process (not a child of CMD); message pump required | User session | **Yes** |
+| Windows | reboot | `WM_QUERYENDSESSION` | same as shutdown | same | Reboot vs shutdown not always distinct | User session | Best-effort |
+| Windows | sleep / hibernate | `WM_POWERBROADCAST` (`PBT_APMSUSPEND`, lid) | `SetThreadExecutionState(ES_SYSTEM_REQUIRED)` | Temporary hold + timeout | Hibernate vs sleep not always distinct | User session | **Sleep validated** |
+
+## Windows shutdown behavior (validated)
+
+Observed on Windows 10/11 with the test bundle:
+
+1. User initiates shutdown (Start menu — not `shutdown /p`).
+2. Extension registers block reason: *Application synchronization in progress*.
+3. Returns **`TRUE`** from `WM_QUERYENDSESSION` so shutdown is not cancelled.
+4. Holds on **`WM_ENDSESSION`** until Python calls `synccomplete()` (up to `max_wait_seconds`).
+5. Python callback runs on a **dedicated Python thread** (not the Rust worker).
+6. After sync, block reason is destroyed and the **host process exits** so shutdown continues automatically.
+
+Requirements for production apps on Windows:
+
+- Call `LifecycleManager.start()` from the process that should block shutdown (your service/app), not from a short-lived wrapper script.
+- After shutdown/reboot sync, **terminate the process** (the test uses `os._exit(0)` after `synccomplete()`).
+- Avoid running under CMD/IDE terminals for shutdown-sensitive workloads — they appear separately in the shutdown UI.
 
 ## Terminology
 
 - **Detection**: Rust learns that a transition is imminent.
 - **Delay**: OS transition is temporarily held while the extension waits for Python sync.
-- **Notification**: Python is informed; OS may not be materially delayed.
-- **Veto / cancellation**: Not used; this extension does not run shell commands like `shutdown /a`.
+- **Notification**: Python is informed; OS may not be materially delayed (macOS shutdown).
+- **Veto / cancellation**: This extension does not cancel shutdown session-wide (no `shutdown /a`).
 
 ## Containers and CI
 
-If logind, AppKit session APIs, or a Windows message pump are unavailable, lifecycle detection may fail gracefully at startup with logged errors. Use `MockLifecycle` in automated tests instead of real OS events.
+If logind, AppKit session APIs, or a Windows message pump are unavailable, lifecycle detection may fail gracefully at startup. Use `MockLifecycle` in automated tests instead of real OS events.
