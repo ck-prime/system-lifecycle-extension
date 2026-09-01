@@ -45,10 +45,12 @@ The extension never blocks shutdown/sleep indefinitely.
 - Startup may fail platform listener initialization.
 - Application should treat lifecycle protection as unavailable and rely on durable local storage.
 
-## macOS shutdown delay unavailable
+## macOS shutdown / lid delay limits
 
-- Shutdown/reboot is still **detected** and surfaced to Python.
-- True OS-level shutdown delay is not guaranteed; sleep uses IOPM assertions.
+- Shutdown is detected via loginwindow `notify(3)` (`com.apple.system.loginwindow.shutdownInitiated`) after the process is transformed to a UIElement app. SIGTERM alone is too late (loginwindow SIGKILLs before a 6s sync can finish).
+- Delay is a hold until `synccomplete()` or timeout. The OS can still force-quit after its own logout limit. This is weaker than Windows `ShutdownBlockReasonCreate`.
+- Lid close is detected via `kIOPMMessageClamshellStateChange` and delayed by holding `IOAllowPowerChange` on `kIOMessageSystemWillSleep` (about 30 seconds of OS slack if the app never acknowledges).
+- `PreventUserIdleSystemSleep` alone does **not** delay lid-close sleep; the extension uses `PreventSystemSleep` plus the IOKit acknowledge hold.
 
 ## Windows session without message pump
 

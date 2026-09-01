@@ -6,7 +6,11 @@ Integration tests:
 
 - `tests/lifecycle_integration.rs` — mock lifecycle + Python callback flows (sync, timeout, exceptions, duplicate `synccomplete()`)
 
-Real OS lifecycle tests (shutdown/sleep) are manual only. Windows: see `bundle/system-lifecycle-windows-test-bundle/README.md`.
+Real OS lifecycle tests (shutdown/sleep/lid) are manual only.
+
+- Windows: `bundle/system-lifecycle-windows-test-bundle/`
+- macOS 3.14: `bundle/system-lifecycle-macos-test-bundle/`
+- macOS 3.10: `bundle/system-lifecycle-macos-py310-test-bundle/`
 
 Run:
 

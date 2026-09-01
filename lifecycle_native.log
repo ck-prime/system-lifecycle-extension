@@ -1,0 +1,37 @@
+[1788292847554ms] native: IOPM assertion created type=PreventSystemSleep id=33264
+[1788292847554ms] native: IOPM assertion created type=PreventUserIdleSystemSleep id=33265
+[1788292847554ms] native: IOPM assertion released id=33264
+[1788292847555ms] native: IOPM assertion released id=33265
+[1788292847555ms] native: macos lifecycle listener starting
+[1788292847555ms] native: sudden/automatic termination disabled
+[1788292847555ms] native: SIGTERM/SIGHUP handlers installed
+[1788292847555ms] native: clamshell (lid) interest registered
+[1788292847555ms] native: IORegisterForSystemPower succeeded
+[1788292847600ms] native: TransformProcessType UIElement status=0
+[1788292847600ms] native: setActivationPolicy accessory accepted=false
+[1788292847600ms] native: NSApplication accessory delegate installed
+[1788292847602ms] native: NSWorkspace sleep/power-off observers registered
+[1788292847602ms] native: kAEQuitApplication handler installed
+[1788292847602ms] native: macos IOKit + NSWorkspace listeners registered
+[1788292847602ms] native: Darwin + distributed shutdown notifications registered
+[1788292847602ms] native: entering NSApplication run (IOKit sleep + AppKit terminate hold)
+[1788292932768ms] native: IOPM assertion created type=PreventSystemSleep id=33269
+[1788292932768ms] native: IOPM assertion created type=PreventUserIdleSystemSleep id=33270
+[1788292932768ms] native: IOPM assertion released id=33269
+[1788292932769ms] native: IOPM assertion released id=33270
+[1788292932769ms] native: macos lifecycle listener starting
+[1788292932769ms] native: sudden/automatic termination disabled
+[1788292932802ms] native: TransformProcessType UIElement status=0
+[1788292932802ms] native: SIGTERM/SIGHUP handlers installed
+[1788292932802ms] native: clamshell (lid) interest registered
+[1788292932802ms] native: IORegisterForSystemPower succeeded
+[1788292932813ms] native: TransformProcessType UIElement status=-50
+[1788292932813ms] native: setActivationPolicy accessory accepted=false
+[1788292932814ms] native: NSApplication accessory delegate installed
+[1788292932815ms] native: NSWorkspace sleep/power-off observers registered
+[1788292932815ms] native: kAEQuitApplication handler installed
+[1788292932815ms] native: macos IOKit + NSWorkspace listeners registered
+[1788292932815ms] native: Darwin + distributed shutdown notifications registered
+[1788292932815ms] native: entering run loop (IOKit sleep + AppKit/Darwin shutdown)
+[1788292932815ms] native: loginwindow notify(3) tokens registered
+[1788292933175ms] native: macos lifecycle listener stopped

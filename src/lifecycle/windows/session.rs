@@ -69,11 +69,9 @@ impl crate::lifecycle::platform::PlatformGuard for WindowsGuard {
                 }
                 reset_shutdown_handling();
             }
-            LifecycleEventType::Sleep | LifecycleEventType::Hibernate => {
-                unsafe {
-                    SetThreadExecutionState(ES_CONTINUOUS);
-                }
-            }
+            LifecycleEventType::Sleep | LifecycleEventType::Hibernate => unsafe {
+                SetThreadExecutionState(ES_CONTINUOUS);
+            },
         }
 
         self.released = true;
@@ -99,11 +97,8 @@ pub fn block_shutdown(hwnd: HWND) -> LifecycleResult<()> {
 
         let mut buffer = vec![0u16; 256];
         let mut length = buffer.len() as u32;
-        let queried = ShutdownBlockReasonQuery(
-            hwnd,
-            windows::core::PWSTR(buffer.as_mut_ptr()),
-            &mut length,
-        );
+        let queried =
+            ShutdownBlockReasonQuery(hwnd, windows::core::PWSTR(buffer.as_mut_ptr()), &mut length);
         if queried.is_ok() && length > 0 {
             let end = length as usize;
             let text = String::from_utf16_lossy(&buffer[..end.min(buffer.len())])

@@ -9,8 +9,11 @@ use std::thread::JoinHandle;
 use std::time::Duration;
 use tracing::{error, info, warn};
 use windows::core::GUID;
-use windows::Win32::Foundation::{BOOL, GetLastError, HWND, LPARAM, LRESULT, WPARAM};
-use windows::Win32::System::Console::{SetConsoleCtrlHandler, CTRL_LOGOFF_EVENT, CTRL_SHUTDOWN_EVENT};
+use windows::Win32::Foundation::{GetLastError, BOOL, HWND, LPARAM, LRESULT, WPARAM};
+use windows::Win32::System::Console::GetConsoleWindow;
+use windows::Win32::System::Console::{
+    SetConsoleCtrlHandler, CTRL_LOGOFF_EVENT, CTRL_SHUTDOWN_EVENT,
+};
 use windows::Win32::System::LibraryLoader::GetModuleHandleW;
 use windows::Win32::System::Power::{
     RegisterPowerSettingNotification, RegisterSuspendResumeNotification,
@@ -22,18 +25,18 @@ use windows::Win32::System::RemoteDesktop::{
 };
 use windows::Win32::System::SystemServices::GUID_LIDSWITCH_STATE_CHANGE;
 use windows::Win32::System::Threading::SetProcessShutdownParameters;
-use windows::Win32::System::Console::GetConsoleWindow;
 use windows::Win32::UI::WindowsAndMessaging::{
-    CreateWindowExW, DefWindowProcW, DestroyWindow, DispatchMessageW, GetMessageW, GetWindowLongPtrW, PostMessageW, RegisterClassW, SetWindowLongPtrW, ShowWindow,
-    TranslateMessage, CS_HREDRAW, CS_VREDRAW, DEVICE_NOTIFY_WINDOW_HANDLE, GWLP_USERDATA, SW_HIDE,
-    WM_DESTROY, WM_ENDSESSION, WM_POWERBROADCAST, WM_QUERYENDSESSION, WM_USER, WM_WTSSESSION_CHANGE,
-    WNDCLASSW, WS_EX_NOACTIVATE, WS_OVERLAPPEDWINDOW, MSG, WTS_SESSION_LOGOFF,
+    CreateWindowExW, DefWindowProcW, DestroyWindow, DispatchMessageW, GetMessageW,
+    GetWindowLongPtrW, PostMessageW, RegisterClassW, SetWindowLongPtrW, ShowWindow,
+    TranslateMessage, CS_HREDRAW, CS_VREDRAW, DEVICE_NOTIFY_WINDOW_HANDLE, GWLP_USERDATA, MSG,
+    SW_HIDE, WM_DESTROY, WM_ENDSESSION, WM_POWERBROADCAST, WM_QUERYENDSESSION, WM_USER,
+    WM_WTSSESSION_CHANGE, WNDCLASSW, WS_EX_NOACTIVATE, WS_OVERLAPPEDWINDOW, WTS_SESSION_LOGOFF,
 };
 
 use super::native_log::{native_log, set_log_path};
 use super::session::{
-    begin_shutdown_handling, block_shutdown, hold_sleep_power, reset_shutdown_handling, SendHwnd,
-    WindowsGuard, wide_string,
+    begin_shutdown_handling, block_shutdown, hold_sleep_power, reset_shutdown_handling,
+    wide_string, SendHwnd, WindowsGuard,
 };
 use crate::lifecycle::sync_wait::SyncWait;
 
@@ -80,7 +83,10 @@ impl WindowState {
             return true;
         }
 
-        let line = format!("native: shutdown detected source={source} event={}", event_type.as_str());
+        let line = format!(
+            "native: shutdown detected source={source} event={}",
+            event_type.as_str()
+        );
         native_log(&line);
         info!(
             source,
@@ -125,11 +131,16 @@ impl WindowState {
 }
 
 fn post_shutdown_from_console(source: &'static str) {
-    native_log(&format!("native: {source} received, posting to window thread"));
+    native_log(&format!(
+        "native: {source} received, posting to window thread"
+    ));
     let hwnd = lifecycle_hwnd_slot().lock().get();
     if hwnd.0.is_null() {
         native_log("native: console shutdown ignored, window unavailable");
-        warn!(source, "console shutdown signal ignored; lifecycle window unavailable");
+        warn!(
+            source,
+            "console shutdown signal ignored; lifecycle window unavailable"
+        );
         return;
     }
     unsafe {
@@ -190,7 +201,8 @@ unsafe extern "system" fn window_proc(
             let critical = (lparam.0 as u32) & ENDSESSION_CRITICAL != 0;
             if critical {
                 native_log("native: critical shutdown, not blocking");
-                let _ = state.notify_shutdown(LifecycleEventType::Shutdown, "WM_QUERYENDSESSION_CRITICAL");
+                let _ = state
+                    .notify_shutdown(LifecycleEventType::Shutdown, "WM_QUERYENDSESSION_CRITICAL");
                 return LRESULT(1);
             }
             let handled = state.notify_shutdown(LifecycleEventType::Shutdown, "WM_QUERYENDSESSION");
@@ -234,11 +246,11 @@ unsafe extern "system" fn window_proc(
                 }
                 PBT_POWERSETTINGCHANGE if lparam.0 != 0 => {
                     let setting = unsafe { &*(lparam.0 as *const POWERBROADCAST_SETTING) };
-                    if setting.PowerSetting == GUID_LIDSWITCH_STATE_CHANGE && setting.DataLength >= 4
+                    if setting.PowerSetting == GUID_LIDSWITCH_STATE_CHANGE
+                        && setting.DataLength >= 4
                     {
-                        let lid_open = unsafe {
-                            (setting.Data.as_ptr() as *const u32).read_unaligned()
-                        };
+                        let lid_open =
+                            unsafe { (setting.Data.as_ptr() as *const u32).read_unaligned() };
                         if lid_open == 0 {
                             state.notify_sleep("GUID_LIDSWITCH_STATE_CHANGE");
                         }
@@ -360,8 +372,8 @@ fn run_message_loop(
 
         let class_name = window_class_name();
         let title = window_title();
-        let hinstance = GetModuleHandleW(None)
-            .map_err(|err| LifecycleError::Platform(err.to_string()))?;
+        let hinstance =
+            GetModuleHandleW(None).map_err(|err| LifecycleError::Platform(err.to_string()))?;
 
         let class = WNDCLASSW {
             lpfnWndProc: Some(window_proc),

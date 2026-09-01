@@ -42,9 +42,8 @@ windows = { version = "0.58", features = [
 core-foundation = "0.10"
 core-foundation-sys = "0.8"
 objc2 = "0.5"
-objc2-foundation = "0.2"
-objc2-app-kit = "0.2"
-block2 = "0.5"
+objc2-foundation = { version = "0.2", features = ["NSString", "NSObject"] }
+libc = "0.2"
 
 [dev-dependencies]
 pyo3 = { version = "0.23", features = ["auto-initialize"] }

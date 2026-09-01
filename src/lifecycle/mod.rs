@@ -1,10 +1,10 @@
 pub mod controller;
 pub mod dispatch;
 pub mod event;
-pub mod sync_wait;
 pub mod mock;
 pub mod platform;
 pub mod state;
+pub mod sync_wait;
 
 #[cfg(target_os = "linux")]
 pub mod linux;

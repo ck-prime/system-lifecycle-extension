@@ -29,16 +29,18 @@ OS transition continues
 
 On **Windows shutdown**, the message loop also **blocks on `WM_ENDSESSION`** until sync completes, then posts quit so the process can exit cleanly.
 
+On **macOS**, a dedicated CFRunLoop thread registers IOKit power notifications and an accessory `NSApplication`. The process is transformed to a UIElement app. **Sleep / lid close** delays `IOAllowPowerChange` until sync (same role as `WM_ENDSESSION`). **Shutdown** is detected via loginwindow `notify(3)` (`shutdownInitiated`) and held until `synccomplete()` or timeout.
+
 ## Components
 
 | Layer | Responsibility |
 |-------|----------------|
 | `bridge/` | PyO3 bindings, `LifecycleManager`, `PythonDispatchThread` (callback queue) |
 | `lifecycle/dispatch.rs` | `emit_lifecycle_event`, rendezvous with worker ready signal |
-| `lifecycle/sync_wait.rs` | Condvar used by worker and Windows `WM_ENDSESSION` |
+| `lifecycle/sync_wait.rs` | Condvar used by worker, Windows `WM_ENDSESSION`, and macOS `IOAllowPowerChange` / terminate hold |
 | `lifecycle/` | State machine, event types, platform trait |
 | `lifecycle/linux/` | systemd-logind over D-Bus, delay inhibitors |
-| `lifecycle/macos/` | NSWorkspace notifications, IOPM assertions |
+| `lifecycle/macos/` | CFRunLoop, IOKit sleep/lid (`IOAllowPowerChange`), NSApplication terminate hold, IOPM assertions |
 | `lifecycle/windows/` | Hidden top-level window, session/power messages, shutdown block reason |
 | `native_log.rs` | Optional `lifecycle_native.log` for shutdown debugging |
 | `errors.rs` | Typed errors (`thiserror`) |
@@ -116,6 +118,16 @@ trait PlatformLifecycle: Send {
 3. `WM_ENDSESSION` (ending): message loop waits on same `sync_wait`.
 4. `synccomplete()`: worker releases guard (`ShutdownBlockReasonDestroy`); ENDSESSION wait completes.
 5. Host process should **exit** so shutdown proceeds (test bundle uses `os._exit(0)`).
+
+## macOS shutdown and lid-close sequence
+
+1. Dedicated listener thread runs `CFRunLoop` (NSWorkspace needs a run loop; IOKit sources are attached to it).
+2. **Lid close**: `kIOPMMessageClamshellStateChange` with `kClamshellStateBit` → emit `sleep`, take `PreventSystemSleep`.
+3. **Sleep** (lid, Apple menu, or idle completing): `kIOMessageSystemWillSleep` → emit if not already in-flight, **wait on `sync_wait`**, then `IOAllowPowerChange`.
+4. **Shutdown / restart**: `applicationShouldTerminate` (and `NSWorkspaceWillPowerOffNotification`) → emit `shutdown` or `reboot`, wait on `sync_wait`, return `NSTerminateNow`.
+5. After shutdown/reboot sync, the host process should **exit** (`os._exit(0)` in the test script).
+
+Windows code paths are unchanged; macOS uses the same `emit_lifecycle_event` / `SyncWait` contract.
 
 ## Python API
 

@@ -98,9 +98,7 @@ impl WorkerContext {
         info!("waiting for synccomplete");
 
         let completed = self.sync_wait.wait(self.max_wait);
-        native_log(&format!(
-            "bridge: sync wait finished completed={completed}"
-        ));
+        native_log(&format!("bridge: sync wait finished completed={completed}"));
         let mut session = ActiveSession { event, guard };
 
         if completed {

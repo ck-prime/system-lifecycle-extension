@@ -5,14 +5,14 @@ use crate::errors::{LifecycleError, LifecycleResult};
 use crate::lifecycle::dispatch::{emit_lifecycle_event, CallbackDispatcher};
 use crate::lifecycle::event::{LifecycleEventType, PlatformEvent};
 use crate::lifecycle::platform::{PlatformGuard, PlatformLifecycle};
+use crate::lifecycle::sync_wait::SyncWait;
 use futures_util::StreamExt;
 use logind::{classify_shutdown, classify_sleep, ManagerProxy};
 use parking_lot::Mutex;
-use crate::lifecycle::sync_wait::SyncWait;
 use std::sync::mpsc::{Receiver, SyncSender};
-use std::time::Duration;
 use std::sync::{Arc, OnceLock};
 use std::thread::JoinHandle;
+use std::time::Duration;
 use tracing::{error, info, warn};
 
 static RUNTIME: OnceLock<tokio::runtime::Runtime> = OnceLock::new();
