@@ -35,3 +35,201 @@
 [1788292932815ms] native: entering run loop (IOKit sleep + AppKit/Darwin shutdown)
 [1788292932815ms] native: loginwindow notify(3) tokens registered
 [1788292933175ms] native: macos lifecycle listener stopped
+[1788322208001ms] bridge: python dispatch thread started
+[1788322208002ms] bridge: controller worker started
+[1788322208003ms] bridge: emitting lifecycle event source=mock_inject event=shutdown
+[1788322208003ms] bridge: platform event received event=shutdown
+[1788322208004ms] bridge: python dispatch thread started
+[1788322208004ms] bridge: waiting for synccomplete
+[1788322208004ms] bridge: emitting lifecycle event source=mock_inject event=sleep
+[1788322208005ms] bridge: python dispatch thread started
+[1788322208005ms] bridge: controller worker started
+[1788322208005ms] bridge: controller worker started
+[1788322208005ms] bridge: platform event received event=sleep
+[1788322208006ms] bridge: worker ready for python dispatch
+[1788322208006ms] bridge: enqueueing python callback event=sleep
+[1788322208008ms] bridge: emitting lifecycle event source=mock_inject event=shutdown
+[1788322208008ms] bridge: worker ready for python dispatch
+[1788322208008ms] bridge: enqueueing python callback event=shutdown
+[1788322208009ms] bridge: waiting for synccomplete
+[1788322208009ms] bridge: platform event received event=shutdown
+[1788322208009ms] bridge: waiting for synccomplete
+[1788322208009ms] bridge: worker ready for python dispatch
+[1788322208009ms] bridge: enqueueing python callback event=shutdown
+[1788322208009ms] bridge: python callback enqueued event=sleep
+[1788322208009ms] bridge: python callback enqueued event=shutdown
+[1788322208013ms] bridge: python callback enqueued event=shutdown
+[1788322208026ms] bridge: sync wait finished completed=true
+[1788322208026ms] bridge: controller worker exiting
+[1788322208027ms] bridge: python dispatch thread stopped
+[1788322208204ms] bridge: sync wait finished completed=false
+[1788322208209ms] bridge: sync wait finished completed=false
+[1788322208403ms] bridge: controller worker exiting
+[1788322208403ms] bridge: python dispatch thread stopped
+[1788322208504ms] bridge: controller worker exiting
+[1788322208505ms] bridge: python dispatch thread stopped
+[1788323449771ms] bridge: python dispatch thread started
+[1788323449773ms] bridge: controller worker started
+[1788323449773ms] bridge: emitting lifecycle event source=mock_inject event=shutdown
+[1788323449774ms] bridge: python dispatch thread started
+[1788323449774ms] bridge: platform event received event=shutdown
+[1788323449774ms] bridge: waiting for synccomplete
+[1788323449774ms] bridge: worker ready for python dispatch
+[1788323449774ms] bridge: enqueueing python callback event=shutdown
+[1788323449774ms] bridge: python callback enqueued event=shutdown
+[1788323449774ms] bridge: controller worker started
+[1788323449776ms] bridge: emitting lifecycle event source=mock_inject event=sleep
+[1788323449776ms] bridge: platform event received event=sleep
+[1788323449776ms] bridge: waiting for synccomplete
+[1788323449778ms] bridge: python dispatch thread started
+[1788323449781ms] bridge: worker ready for python dispatch
+[1788323449781ms] bridge: enqueueing python callback event=sleep
+[1788323449781ms] bridge: controller worker started
+[1788323449781ms] bridge: python callback enqueued event=sleep
+[1788323449784ms] bridge: emitting lifecycle event source=mock_inject event=shutdown
+[1788323449784ms] bridge: platform event received event=shutdown
+[1788323449784ms] bridge: waiting for synccomplete
+[1788323449787ms] bridge: worker ready for python dispatch
+[1788323449787ms] bridge: enqueueing python callback event=shutdown
+[1788323449788ms] bridge: python callback enqueued event=shutdown
+[1788323449794ms] bridge: sync wait finished completed=true
+[1788323449794ms] bridge: controller worker exiting
+[1788323449794ms] bridge: python dispatch thread stopped
+[1788323449980ms] bridge: sync wait finished completed=false
+[1788323449985ms] bridge: sync wait finished completed=false
+[1788323450180ms] bridge: controller worker exiting
+[1788323450182ms] bridge: python dispatch thread stopped
+[1788323450274ms] bridge: controller worker exiting
+[1788323450275ms] bridge: python dispatch thread stopped
+[1788323786557ms] bridge: python dispatch thread started
+[1788323786557ms] bridge: controller worker started
+[1788323786557ms] bridge: emitting lifecycle event source=mock_inject event=shutdown
+[1788323786557ms] bridge: platform event received event=shutdown
+[1788323786557ms] bridge: python dispatch thread started
+[1788323786557ms] bridge: waiting for synccomplete
+[1788323786557ms] bridge: worker ready for python dispatch
+[1788323786558ms] bridge: python dispatch thread started
+[1788323786558ms] bridge: enqueueing python callback event=shutdown
+[1788323786558ms] bridge: emitting lifecycle event source=mock_inject event=shutdown
+[1788323786558ms] bridge: controller worker started
+[1788323786558ms] bridge: platform event received event=shutdown
+[1788323786558ms] bridge: waiting for synccomplete
+[1788323786558ms] bridge: worker ready for python dispatch
+[1788323786558ms] bridge: enqueueing python callback event=shutdown
+[1788323786558ms] bridge: controller worker started
+[1788323786558ms] bridge: emitting lifecycle event source=mock_inject event=sleep
+[1788323786558ms] bridge: platform event received event=sleep
+[1788323786558ms] bridge: python callback enqueued event=shutdown
+[1788323786559ms] bridge: python callback enqueued event=shutdown
+[1788323786559ms] bridge: waiting for synccomplete
+[1788323786559ms] bridge: worker ready for python dispatch
+[1788323786559ms] bridge: enqueueing python callback event=sleep
+[1788323786559ms] bridge: python callback enqueued event=sleep
+[1788323786578ms] bridge: sync wait finished completed=true
+[1788323786578ms] bridge: controller worker exiting
+[1788323786579ms] bridge: python dispatch thread stopped
+[1788323786757ms] bridge: sync wait finished completed=false
+[1788323786759ms] bridge: sync wait finished completed=false
+[1788323786957ms] bridge: controller worker exiting
+[1788323786957ms] bridge: python dispatch thread stopped
+[1788323787058ms] bridge: controller worker exiting
+[1788323787058ms] bridge: python dispatch thread stopped
+[1788331244505ms] bridge: python dispatch thread started
+[1788331244505ms] bridge: controller worker started
+[1788331244506ms] bridge: python dispatch thread started
+[1788331244506ms] bridge: python dispatch thread started
+[1788331244507ms] bridge: controller worker started
+[1788331244507ms] bridge: emitting lifecycle event source=mock_inject event=shutdown
+[1788331244508ms] bridge: platform event received event=shutdown
+[1788331244508ms] bridge: waiting for synccomplete
+[1788331244508ms] bridge: emitting lifecycle event source=mock_inject event=sleep
+[1788331244508ms] bridge: emitting lifecycle event source=mock_inject event=shutdown
+[1788331244508ms] bridge: platform event received event=shutdown
+[1788331244508ms] bridge: waiting for synccomplete
+[1788331244509ms] bridge: worker ready for python dispatch
+[1788331244509ms] bridge: enqueueing python callback event=shutdown
+[1788331244509ms] bridge: python callback enqueued event=shutdown
+[1788331244510ms] bridge: controller worker started
+[1788331244510ms] bridge: platform event received event=sleep
+[1788331244510ms] bridge: waiting for synccomplete
+[1788331244511ms] bridge: worker ready for python dispatch
+[1788331244511ms] bridge: worker ready for python dispatch
+[1788331244511ms] bridge: enqueueing python callback event=shutdown
+[1788331244511ms] bridge: python callback enqueued event=shutdown
+[1788331244514ms] bridge: enqueueing python callback event=sleep
+[1788331244514ms] bridge: python callback enqueued event=sleep
+[1788331244526ms] bridge: sync wait finished completed=true
+[1788331244526ms] bridge: controller worker exiting
+[1788331244527ms] bridge: python dispatch thread stopped
+[1788331244708ms] bridge: sync wait finished completed=false
+[1788331244710ms] bridge: sync wait finished completed=false
+[1788331244906ms] bridge: controller worker exiting
+[1788331244907ms] bridge: python dispatch thread stopped
+[1788331245006ms] bridge: controller worker exiting
+[1788331245007ms] bridge: python dispatch thread stopped
+[1788332175481ms] bridge: python dispatch thread started
+[1788332175481ms] bridge: controller worker started
+[1788332175481ms] bridge: emitting lifecycle event source=mock_inject event=shutdown
+[1788332175481ms] bridge: python dispatch thread started
+[1788332175481ms] bridge: platform event received event=shutdown
+[1788332175481ms] bridge: waiting for synccomplete
+[1788332175482ms] bridge: controller worker started
+[1788332175482ms] bridge: emitting lifecycle event source=mock_inject event=sleep
+[1788332175482ms] bridge: platform event received event=sleep
+[1788332175482ms] bridge: waiting for synccomplete
+[1788332175482ms] bridge: worker ready for python dispatch
+[1788332175482ms] bridge: enqueueing python callback event=shutdown
+[1788332175482ms] bridge: worker ready for python dispatch
+[1788332175482ms] bridge: enqueueing python callback event=sleep
+[1788332175482ms] bridge: python callback enqueued event=shutdown
+[1788332175482ms] bridge: python dispatch thread started
+[1788332175482ms] bridge: controller worker started
+[1788332175482ms] bridge: emitting lifecycle event source=mock_inject event=shutdown
+[1788332175483ms] bridge: platform event received event=shutdown
+[1788332175483ms] bridge: waiting for synccomplete
+[1788332175483ms] bridge: worker ready for python dispatch
+[1788332175483ms] bridge: enqueueing python callback event=shutdown
+[1788332175483ms] bridge: python callback enqueued event=sleep
+[1788332175484ms] bridge: python callback enqueued event=shutdown
+[1788332175504ms] bridge: sync wait finished completed=true
+[1788332175504ms] bridge: controller worker exiting
+[1788332175505ms] bridge: python dispatch thread stopped
+[1788332175682ms] bridge: sync wait finished completed=false
+[1788332175682ms] bridge: sync wait finished completed=false
+[1788332175881ms] bridge: controller worker exiting
+[1788332175882ms] bridge: python dispatch thread stopped
+[1788332175982ms] bridge: controller worker exiting
+[1788332175983ms] bridge: python dispatch thread stopped
+[1788332916337ms] bridge: python dispatch thread started
+[1788332916337ms] bridge: controller worker started
+[1788332916337ms] bridge: emitting lifecycle event source=mock_inject event=shutdown
+[1788332916337ms] bridge: python dispatch thread started
+[1788332916337ms] bridge: platform event received event=shutdown
+[1788332916337ms] bridge: waiting for synccomplete
+[1788332916337ms] bridge: worker ready for python dispatch
+[1788332916337ms] bridge: enqueueing python callback event=shutdown
+[1788332916337ms] bridge: emitting lifecycle event source=mock_inject event=shutdown
+[1788332916338ms] bridge: controller worker started
+[1788332916338ms] bridge: platform event received event=shutdown
+[1788332916338ms] bridge: waiting for synccomplete
+[1788332916338ms] bridge: worker ready for python dispatch
+[1788332916338ms] bridge: enqueueing python callback event=shutdown
+[1788332916338ms] bridge: python callback enqueued event=shutdown
+[1788332916338ms] bridge: python dispatch thread started
+[1788332916338ms] bridge: controller worker started
+[1788332916338ms] bridge: emitting lifecycle event source=mock_inject event=sleep
+[1788332916338ms] bridge: platform event received event=sleep
+[1788332916338ms] bridge: python callback enqueued event=shutdown
+[1788332916338ms] bridge: waiting for synccomplete
+[1788332916338ms] bridge: worker ready for python dispatch
+[1788332916338ms] bridge: enqueueing python callback event=sleep
+[1788332916338ms] bridge: python callback enqueued event=sleep
+[1788332916358ms] bridge: sync wait finished completed=true
+[1788332916358ms] bridge: controller worker exiting
+[1788332916359ms] bridge: python dispatch thread stopped
+[1788332916537ms] bridge: sync wait finished completed=false
+[1788332916538ms] bridge: sync wait finished completed=false
+[1788332916737ms] bridge: controller worker exiting
+[1788332916738ms] bridge: python dispatch thread stopped
+[1788332916840ms] bridge: controller worker exiting
+[1788332916841ms] bridge: python dispatch thread stopped

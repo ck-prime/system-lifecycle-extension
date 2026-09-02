@@ -41,17 +41,18 @@ manager.stop()
 - Returns `False` when no synchronization was pending (safe no-op; idempotent).
 - The OS guard is **not** released when the callback returns; only `synccomplete()` or timeout releases it.
 
-### Production embedding (especially Windows and macOS)
+### Production embedding (Windows, macOS, and Linux)
 
 1. **Run as your application process** — do not rely on a parent shell (CMD, IDE terminal) staying open. The process that calls `LifecycleManager.start()` is the one that delays shutdown.
 2. In the lifecycle callback, call `synccomplete()` after durable work finishes.
 3. On **shutdown/reboot**, **exit the process** after sync so the OS can finish the session (see the test bundles for a reference pattern).
+4. On **Linux**, call `LifecycleManager.start()` early in the process lifetime so standby logind delay inhibitors are installed before shutdown or sleep is requested.
 
 ## Platform status
 
 | Platform | Detection | Delay / block | Manual validation |
 |----------|-----------|---------------|-----------------|
-| Linux | logind D-Bus | delay inhibitor | Documented; test in VM |
+| **Linux** | logind `PrepareForShutdown` / `PrepareForSleep` | Standby **delay inhibitor** fds (`shutdown` + `sleep`) held from `start()` | **Shutdown + lid/sleep validated** (see test bundle) |
 | **macOS** | IOKit clamshell/`WillSleep`, loginwindow notify | sleep/lid: `IOAllowPowerChange` + `PreventSystemSleep`; shutdown: UIElement app + loginwindow notify hold | **Shutdown + lid/sleep validated** (see test bundle) |
 | **Windows 10/11** | `WM_QUERYENDSESSION`, power broadcasts | `ShutdownBlockReasonCreate`, `SetThreadExecutionState` | **Shutdown + sleep validated** (see test bundle) |
 
@@ -69,7 +70,7 @@ Build targets:
 
 | Target | Notes |
 |--------|-------|
-| Linux x86_64 / aarch64 | systemd-logind session |
+| **Linux x86_64** | systemd-logind session; cp310 test bundle |
 | macOS x86_64 / arm64 | Sleep/lid + shutdown validated; test bundles for **cp314** and **cp310** |
 | Windows x86_64 | Win10/Win11; cp314 wheel in test bundle |
 
@@ -182,6 +183,50 @@ lifecycle guard released — OS may continue shutdown/sleep
 ```
 
 Native log should include `shutdownInitiated sync finished completed=true` (loginwindow notify) and, for lid close, `IOAllowPowerChange`.
+
+## Linux manual test bundle (CPython 3.10)
+
+Prebuilt wheel + scripts for validating shutdown and lid close / sleep on a real machine (not CI):
+
+```text
+bundle/system-lifecycle-linux-py310-test-bundle/
+  wheels/system_lifecycle-*-cp310-*-manylinux_*.whl
+  install.sh
+  run_test_detached.sh
+  test_lifecycle.py
+  INSTALL.txt
+```
+
+Quick start:
+
+```bash
+cd bundle/system-lifecycle-linux-py310-test-bundle
+chmod +x install.sh run_test_detached.sh
+./install.sh
+./run_test_detached.sh
+# Desktop Shut Down, or close the lid
+# After wake/reboot, check log.txt and lifecycle_native.log
+```
+
+Build from source (optional):
+
+```bash
+scripts/build_linux.sh   # builds cp310 wheel into dist/ and copies to bundle
+```
+
+Successful shutdown or lid/sleep test:
+
+```text
+event detected: type=shutdown   # or type=sleep for lid close
+waiting for 6 seconds
+wait complete
+synccomplete called, returned=True
+lifecycle guard released — OS may continue shutdown/sleep
+```
+
+Native log should include standby inhibitor install, active inhibitor on signal, and `bridge: sync wait finished completed=true`.
+
+**Do not** run the test from inside Cursor for shutdown tests — use the detached launcher. Do not use `systemctl poweroff -i` (bypasses inhibitors).
 
 ## Other test scripts
 

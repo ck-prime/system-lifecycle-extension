@@ -45,6 +45,14 @@ The extension never blocks shutdown/sleep indefinitely.
 - Startup may fail platform listener initialization.
 - Application should treat lifecycle protection as unavailable and rely on durable local storage.
 
+## Linux logind inhibitor timing
+
+- logind **delay** inhibitors must be held **before** the shutdown/sleep operation starts. Calling `Inhibit()` after `PrepareForShutdown` / `PrepareForSleep` may return `OperationInProgress` and will not delay the OS.
+- The extension installs **standby** inhibitors at `start()` and transfers them to the active session when the matching signal arrives.
+- If standby install fails (permissions, no logind session), events are still delivered to Python but the OS may not wait (`NoOpGuard`).
+- Maximum delay is `InhibitDelayMaxUSec` (often 30 seconds) in addition to `max_wait_seconds` in Python.
+- Do not use `systemctl poweroff -i` in tests; it bypasses inhibitors.
+
 ## macOS shutdown / lid delay limits
 
 - Shutdown is detected via loginwindow `notify(3)` (`com.apple.system.loginwindow.shutdownInitiated`) after the process is transformed to a UIElement app. SIGTERM alone is too late (loginwindow SIGKILLs before a 6s sync can finish).

@@ -149,11 +149,86 @@ native: IOAllowPowerChange
 
 Do **not** run the shutdown test from inside Cursor — use `run_test_detached.sh`.
 
+## Linux test bundle (validated shutdown + lid/sleep)
+
+Location: `bundle/system-lifecycle-linux-py310-test-bundle/`
+
+Includes a **cp310** manylinux wheel, `install.sh` (bundle `.venv`), detached launcher, and logging test script.
+
+```bash
+cd bundle/system-lifecycle-linux-py310-test-bundle
+chmod +x install.sh run_test_detached.sh
+./install.sh
+./run_test_detached.sh
+```
+
+Then either:
+
+- **Shutdown**: desktop menu → Shut Down (not `systemctl poweroff -i`).
+- **Lid**: close the lid until sleep, then open it.
+
+Build wheel from source:
+
+```bash
+scripts/build_linux.sh
+```
+
+### Expected success (`log.txt`)
+
+```text
+event detected: type=shutdown
+waiting for 6 seconds
+wait complete
+synccomplete called, returned=True
+lifecycle guard released — OS may continue shutdown/sleep
+```
+
+or for lid close: `event detected: type=sleep` with the same wait/synccomplete lines.
+
+### Expected success (`lifecycle_native.log`)
+
+Startup:
+
+```text
+native: standby logind inhibitor installed event=shutdown
+native: standby logind inhibitor installed event=sleep
+```
+
+Shutdown:
+
+```text
+native: armed active logind inhibitor from standby event=shutdown
+native: logind delay inhibitor active for event=shutdown
+bridge: emitting lifecycle event source=PrepareForShutdown event=shutdown
+bridge: python callback enqueued event=shutdown
+bridge: sync wait finished completed=true
+```
+
+Lid / sleep:
+
+```text
+native: armed active logind inhibitor from standby event=sleep
+bridge: emitting lifecycle event source=PrepareForSleep event=sleep
+bridge: sync wait finished completed=true
+```
+
+### Common mistakes
+
+| Mistake | Symptom |
+|---------|---------|
+| Running `python3 test_lifecycle.py` inside Cursor | Shutdown/sleep may not delay correctly |
+| Two test processes running | Duplicate log lines |
+| `systemctl poweroff -i` | Bypasses logind inhibitors |
+| Starting listener after shutdown already began | `OperationInProgress`; OS does not wait (notification only) |
+| Forgetting to reinstall wheel after rebuild | Old native behavior in logs |
+
+Do **not** run the shutdown test from inside Cursor — use `run_test_detached.sh`.
+
 ## Manual OS test matrix
 
 | Platform | Version | shutdown | reboot | sleep | lid close | callback | synccomplete | timeout | callback exception | duplicate synccomplete |
 |----------|---------|----------|--------|-------|-----------|----------|--------------|---------|--------------------|------------------------|
-| Ubuntu | 22.04 / 24.04 / 26.04 | manual | manual | manual | manual | auto | manual | omit `synccomplete()` | raise in callback | call twice |
+| **Linux** | **Ubuntu 22.04+** | **validated** | manual | **validated** | **validated** | auto | manual | omit `synccomplete()` | raise in callback | call twice |
 | **macOS** | **Intel / Apple Silicon** | **validated** | manual | **validated** | **validated** | auto | manual | omit `synccomplete()` | raise in callback | call twice |
 | **Windows** | **10 / 11** | **validated** | manual | **validated** | manual | auto | manual | omit `synccomplete()` | raise in callback | call twice |
 

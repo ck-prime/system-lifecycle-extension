@@ -1,0 +1,50 @@
+[1788333033982ms] bridge: python dispatch thread started
+[1788333033982ms] bridge: controller worker started
+[1788333033986ms] native: standby logind inhibitor installed event=shutdown
+[1788333033989ms] native: standby logind inhibitor installed event=sleep
+[1788333034982ms] bridge: controller worker exiting
+[1788333034983ms] bridge: python dispatch thread stopped
+[1788333043594ms] bridge: python dispatch thread started
+[1788333043594ms] bridge: controller worker started
+[1788333043601ms] native: standby logind inhibitor installed event=shutdown
+[1788333043605ms] native: standby logind inhibitor installed event=sleep
+[1788333044600ms] bridge: controller worker exiting
+[1788333044601ms] bridge: python dispatch thread stopped
+[1788333153534ms] bridge: python dispatch thread started
+[1788333153534ms] bridge: controller worker started
+[1788333153538ms] native: standby logind inhibitor installed event=shutdown
+[1788333153541ms] native: standby logind inhibitor installed event=sleep
+[1788333168348ms] native: armed active logind inhibitor from standby event=shutdown
+[1788333168348ms] bridge: emitting lifecycle event source=PrepareForShutdown event=shutdown
+[1788333168348ms] bridge: platform event received event=shutdown
+[1788333168348ms] native: logind delay inhibitor active for event=shutdown
+[1788333168348ms] bridge: waiting for synccomplete
+[1788333168348ms] bridge: worker ready for python dispatch
+[1788333168348ms] bridge: enqueueing python callback event=shutdown
+[1788333168348ms] bridge: python callback enqueued event=shutdown
+[1788333174355ms] bridge: sync wait finished completed=true
+[1788333174371ms] native: standby inhibitor install failed event=shutdown error=platform lifecycle error: org.freedesktop.login1.OperationInProgress: The operation inhibition has been requested for is already running
+[1788333307243ms] bridge: python dispatch thread started
+[1788333307243ms] bridge: controller worker started
+[1788333307246ms] native: standby logind inhibitor installed event=shutdown
+[1788333307248ms] native: standby logind inhibitor installed event=sleep
+[1788333310377ms] native: armed active logind inhibitor from standby event=sleep
+[1788333310377ms] bridge: emitting lifecycle event source=PrepareForSleep event=sleep
+[1788333310378ms] bridge: platform event received event=sleep
+[1788333310378ms] native: logind delay inhibitor active for event=sleep
+[1788333310378ms] bridge: waiting for synccomplete
+[1788333310378ms] bridge: worker ready for python dispatch
+[1788333310378ms] bridge: enqueueing python callback event=sleep
+[1788333310379ms] bridge: python callback enqueued event=sleep
+[1788333316386ms] bridge: sync wait finished completed=true
+[1788333316395ms] native: standby inhibitor install failed event=sleep error=platform lifecycle error: org.freedesktop.login1.OperationInProgress: The operation inhibition has been requested for is already running
+[1788333355264ms] native: armed active logind inhibitor from standby event=shutdown
+[1788333355264ms] bridge: emitting lifecycle event source=PrepareForShutdown event=shutdown
+[1788333355264ms] bridge: platform event received event=shutdown
+[1788333355264ms] native: logind delay inhibitor active for event=shutdown
+[1788333355264ms] bridge: waiting for synccomplete
+[1788333355264ms] bridge: worker ready for python dispatch
+[1788333355264ms] bridge: enqueueing python callback event=shutdown
+[1788333355264ms] bridge: python callback enqueued event=shutdown
+[1788333361270ms] bridge: sync wait finished completed=true
+[1788333361293ms] native: standby inhibitor install failed event=shutdown error=platform lifecycle error: org.freedesktop.login1.OperationInProgress: The operation inhibition has been requested for is already running

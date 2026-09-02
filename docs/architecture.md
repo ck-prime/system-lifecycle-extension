@@ -31,6 +31,8 @@ On **Windows shutdown**, the message loop also **blocks on `WM_ENDSESSION`** unt
 
 On **macOS**, a dedicated CFRunLoop thread registers IOKit power notifications and an accessory `NSApplication`. The process is transformed to a UIElement app. **Sleep / lid close** delays `IOAllowPowerChange` until sync (same role as `WM_ENDSESSION`). **Shutdown** is detected via loginwindow `notify(3)` (`shutdownInitiated`) and held until `synccomplete()` or timeout.
 
+On **Linux**, a logind D-Bus listener installs **standby delay inhibitors** for `shutdown` and `sleep` when `start()` runs. On `PrepareForShutdown` / `PrepareForSleep`, the matching standby fd is armed for the active session; logind waits until `synccomplete()` closes it (same role as Windows block reason / macOS IOKit hold).
+
 ## Components
 
 | Layer | Responsibility |
@@ -39,7 +41,7 @@ On **macOS**, a dedicated CFRunLoop thread registers IOKit power notifications a
 | `lifecycle/dispatch.rs` | `emit_lifecycle_event`, rendezvous with worker ready signal |
 | `lifecycle/sync_wait.rs` | Condvar used by worker, Windows `WM_ENDSESSION`, and macOS `IOAllowPowerChange` / terminate hold |
 | `lifecycle/` | State machine, event types, platform trait |
-| `lifecycle/linux/` | systemd-logind over D-Bus, delay inhibitors |
+| `lifecycle/linux/` | systemd-logind over D-Bus, standby delay inhibitors |
 | `lifecycle/macos/` | CFRunLoop, IOKit sleep/lid (`IOAllowPowerChange`), NSApplication terminate hold, IOPM assertions |
 | `lifecycle/windows/` | Hidden top-level window, session/power messages, shutdown block reason |
 | `native_log.rs` | Optional `lifecycle_native.log` for shutdown debugging |
@@ -129,6 +131,17 @@ trait PlatformLifecycle: Send {
 
 Windows code paths are unchanged; macOS uses the same `emit_lifecycle_event` / `SyncWait` contract.
 
+## Linux shutdown and sleep sequence (validated)
+
+1. On `start()`, install standby logind delay inhibitors for `shutdown` and `sleep` (fds held open).
+2. `PrepareForShutdown` / `PrepareForSleep` (`start=true`): transfer standby inhibitor to active session, emit event to Python.
+3. Worker waits on `sync_wait`; logind waits for inhibitor fd to close (up to `InhibitDelayMaxUSec`).
+4. `synccomplete()`: worker releases guard (closes fd); logind continues shutdown/sleep.
+5. After shutdown sync, the host process should **exit** (`os._exit(0)` in the test script).
+6. Standby inhibitor is replenished asynchronously after release for the next event.
+
+Test bundle: `bundle/system-lifecycle-linux-py310-test-bundle/`
+
 ## Python API
 
 ```python
@@ -151,6 +164,8 @@ Events expose `event.type` (`shutdown`, `reboot`, `sleep`, `hibernate`) and `eve
 | Real OS | Manual shutdown/sleep | No |
 
 Windows manual validation: `bundle/system-lifecycle-windows-test-bundle/` (see [testing.md](testing.md)).
+
+Linux manual validation: `bundle/system-lifecycle-linux-py310-test-bundle/` (see [testing.md](testing.md)).
 
 ## Build & Packaging
 

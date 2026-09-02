@@ -1,0 +1,71 @@
+System Lifecycle Extension — Linux Test Bundle (CPython 3.10)
+==============================================================
+
+Requirements
+------------
+- Linux with systemd-logind (Ubuntu 22.04+, Fedora, etc.)
+- CPython 3.10 (must match wheel tag cp310)
+- Session D-Bus access (normal desktop login)
+
+How it works
+------------
+When LifecycleManager.start() runs, the extension installs standby logind
+delay inhibitors for shutdown and sleep. When you shut down or close the lid,
+logind waits (up to ~30 seconds) for synccomplete() before continuing.
+
+Install
+-------
+1. Open a terminal.
+
+2. Go to this folder:
+
+   cd /path/to/system-lifecycle-extension/bundle/system-lifecycle-linux-py310-test-bundle
+
+3. Create a local venv and install the wheel (no Rust required):
+
+   chmod +x install.sh run_test_detached.sh
+   ./install.sh
+
+   To pick a specific 3.10 binary:
+
+   PYTHON=/usr/bin/python3.10 ./install.sh
+
+Run the test (recommended — detached)
+-------------------------------------
+Do NOT run `python3 test_lifecycle.py` inside Cursor for shutdown tests.
+
+Instead, start detached:
+
+   ./run_test_detached.sh
+
+If `.venv` is missing, `run_test_detached.sh` runs `install.sh` first.
+
+Then trigger shutdown or sleep:
+- Desktop menu -> Shut Down
+- Or close the laptop lid (maps to sleep on most systems)
+
+What you should see
+-------------------
+- Shutdown or sleep pauses for ~6 seconds while the test syncs
+- log.txt shows synccomplete returned=True
+- For shutdown, the test process exits (no further "running" lines)
+
+Logs
+----
+- log.txt — Python test output
+- lifecycle_native.log — native bridge
+  startup: standby logind inhibitor installed event=shutdown|sleep
+  event:   armed active logind inhibitor from standby
+  end:     bridge: sync wait finished completed=true
+
+Interactive mode (debug only)
+-----------------------------
+   .venv/bin/python test_lifecycle.py
+
+Notes
+-----
+- max_wait_seconds is 90 in the script (must exceed the 6-second sync wait).
+- Press Ctrl+C to stop when running interactively in a console.
+- Kill a leftover test: kill "$(cat .lifecycle_test.lock)"
+- Do not use `systemctl poweroff -i` (bypasses inhibitors).
+- Rebuild wheel: scripts/build_linux.sh from repo root, then ./install.sh

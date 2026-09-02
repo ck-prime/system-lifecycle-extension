@@ -4,16 +4,36 @@ This document distinguishes **detection**, **delay**, **veto/cancellation**, and
 
 | Platform | Event | Detection API | Delay / veto mechanism | Max delay behavior | Limitations | Privileges | Validated |
 |----------|-------|---------------|------------------------|--------------------|-------------|------------|-----------|
-| Linux (Ubuntu 22.04+) | shutdown | logind `PrepareForShutdown` + `ScheduledShutdown` | logind **delay inhibitor** fd | Until fd closed or `max_wait_seconds` timeout | Requires systemd-logind on system bus | Session user | Manual VM |
-| Linux | reboot | same as shutdown | same inhibitor | same | Reboot vs shutdown inferred when available | Session user | Manual VM |
-| Linux | sleep / lid | logind `PrepareForSleep` | logind delay inhibitor (`what=sleep`) | same | Lid close usually maps to sleep | Session user | Manual VM |
-| Linux | hibernate | `PrepareForSleep` + `SleepOperation` when available | logind delay inhibitor | same | May appear as `sleep` on older systemd | Session user | Manual VM |
+| Linux (Ubuntu 22.04+) | shutdown | logind `PrepareForShutdown` | Standby **delay inhibitor** fd (`what=shutdown`) held from `start()` | Until fd closed or `max_wait_seconds` timeout | Requires systemd-logind; inhibitor must be held before operation starts | Session user | **Yes** |
+| Linux | reboot | same as shutdown | same standby inhibitor | same | Reported as `shutdown` during `PrepareForShutdown` (reboot inferred only when safe) | Session user | Manual |
+| Linux | sleep / lid | logind `PrepareForSleep` | Standby **delay inhibitor** fd (`what=sleep`) held from `start()` | same | Lid close usually maps to `sleep` | Session user | **Yes** |
+| Linux | hibernate | `PrepareForSleep` | same sleep standby inhibitor | same | May appear as `sleep` on older systemd | Session user | Manual |
 | macOS | sleep | `kIOMessageSystemWillSleep`, `NSWorkspaceWillSleepNotification` | Delay `IOAllowPowerChange` + `PreventSystemSleep` assertion | Until `synccomplete()` or `max_wait_seconds` (OS also has ~30s WillSleep cap) | Not identical to logind semantics | User session | **Yes (lid/sleep)** |
 | macOS | lid close | `kIOPMMessageClamshellStateChange` (`AppleClamshellState`) | Same as sleep (`WillSleep` hold + assertions) | same | Lid close maps to `sleep`; cannot veto lid-close sleep, only delay it | User session | **Yes** |
 | macOS | shutdown / reboot | loginwindow `shutdownInitiated` notify + UIElement app | Hold until `synccomplete()` (notify wait + terminate) | Until sync, timeout, or OS force-quit | SIGTERM alone is too late; process should exit after sync | User session | **Shutdown yes** (reboot best-effort) |
 | **Windows 10/11** | **shutdown** | `WM_QUERYENDSESSION` | `ShutdownBlockReasonCreate` + **`WM_ENDSESSION` hold** until sync | Until block reason destroyed, sync completes, or timeout | Must be the blocking process (not a child of CMD); message pump required | User session | **Yes** |
 | Windows | reboot | `WM_QUERYENDSESSION` | same as shutdown | same | Reboot vs shutdown not always distinct | User session | Best-effort |
 | Windows | sleep / hibernate | `WM_POWERBROADCAST` (`PBT_APMSUSPEND`, lid) | `SetThreadExecutionState(ES_SYSTEM_REQUIRED)` | Temporary hold + timeout | Hibernate vs sleep not always distinct | User session | **Sleep validated** |
+
+## Linux shutdown and sleep behavior (validated)
+
+Observed on Ubuntu with GNOME and the test bundle:
+
+1. On `LifecycleManager.start()`, the extension installs **standby** logind delay inhibitors for `shutdown` and `sleep` (fds held open for the process lifetime).
+2. User initiates shutdown or closes the lid (`PrepareForShutdown` / `PrepareForSleep`).
+3. The standby inhibitor for that event is transferred to the active session; logind waits for the fd to close.
+4. Python callback runs the sync window (6s in the test bundle) on a **dedicated Python thread**.
+5. `synccomplete()` closes the inhibitor fd; logind continues (up to `InhibitDelayMaxUSec`, typically 30s).
+6. After shutdown sync, the test process exits (`os._exit(0)`).
+
+Requirements for production apps on Linux:
+
+- Call `LifecycleManager.start()` early — delay inhibitors cannot be acquired after logind has started the operation (`OperationInProgress`).
+- After shutdown/reboot sync, **terminate the process** so the session can finish.
+- Do not use `systemctl poweroff -i` or equivalent inhibitor bypass flags in tests.
+- Requires a desktop logind session (not headless SSH without D-Bus).
+
+Test bundle: `bundle/system-lifecycle-linux-py310-test-bundle/`
 
 ## Windows shutdown behavior (validated)
 

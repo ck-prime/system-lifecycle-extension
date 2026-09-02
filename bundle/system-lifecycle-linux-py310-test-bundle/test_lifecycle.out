@@ -1,0 +1,33 @@
+[2m2026-09-02T07:15:07.243412Z[0m [32m INFO[0m lifecycle listener started [3mplatform[0m[2m=[0m"linux"
+running, timestamp=2026-09-02 07:15:07 UTC pid=9243
+lifecycle listener started — log file: /home/chandranshu/learn/system-lifecycle-extension/bundle/system-lifecycle-linux-py310-test-bundle/log.txt
+Use desktop Shut Down, or: systemctl poweroff / systemctl suspend
+Then check log.txt and lifecycle_native.log after wake/reboot
+running, timestamp=2026-09-02 07:15:07 UTC
+[2m2026-09-02T07:15:07.249045Z[0m [32m INFO[0m connected to org.freedesktop.login1
+[2m2026-09-02T07:15:10.378447Z[0m [32m INFO[0m lifecycle event detected [3mplatform[0m[2m=[0m"linux" [3mevent[0m[2m=[0m"sleep"
+[2m2026-09-02T07:15:10.378636Z[0m [32m INFO[0m lifecycle guard acquired [3mevent[0m[2m=[0m"sleep"
+[2m2026-09-02T07:15:10.378767Z[0m [32m INFO[0m waiting for synccomplete
+event detected: type=sleep, os_timestamp=1788333310, now=2026-09-02 07:15:10 UTC
+waiting for 6 seconds, timestamp=2026-09-02 07:15:10 UTC
+wait complete, timestamp=2026-09-02 07:15:16 UTC
+synccomplete called, returned=True, timestamp=2026-09-02 07:15:16 UTC
+[2m2026-09-02T07:15:16.386863Z[0m [32m INFO[0m synccomplete received [3mevent[0m[2m=[0m"sleep"
+lifecycle guard released — OS may continue shutdown/sleep
+[2m2026-09-02T07:15:16.386985Z[0m [32m INFO[0m lifecycle guard released [3mevent[0m[2m=[0m"sleep"
+[2m2026-09-02T07:15:16.395422Z[0m [33m WARN[0m failed to install standby logind inhibitor [3merror[0m[2m=[0mplatform lifecycle error: org.freedesktop.login1.OperationInProgress: The operation inhibition has been requested for is already running [3mevent[0m[2m=[0m"sleep"
+running, timestamp=2026-09-02 07:15:22 UTC
+running, timestamp=2026-09-02 07:15:32 UTC
+running, timestamp=2026-09-02 07:15:42 UTC
+running, timestamp=2026-09-02 07:15:52 UTC
+[2m2026-09-02T07:15:55.264707Z[0m [32m INFO[0m lifecycle event detected [3mplatform[0m[2m=[0m"linux" [3mevent[0m[2m=[0m"shutdown"
+[2m2026-09-02T07:15:55.264743Z[0m [32m INFO[0m lifecycle guard acquired [3mevent[0m[2m=[0m"shutdown"
+[2m2026-09-02T07:15:55.264769Z[0m [32m INFO[0m waiting for synccomplete
+event detected: type=shutdown, os_timestamp=1788333355, now=2026-09-02 07:15:55 UTC
+waiting for 6 seconds, timestamp=2026-09-02 07:15:55 UTC
+wait complete, timestamp=2026-09-02 07:16:01 UTC
+synccomplete called, returned=True, timestamp=2026-09-02 07:16:01 UTC
+lifecycle guard released — OS may continue shutdown/sleep
+[2m2026-09-02T07:16:01.270942Z[0m [32m INFO[0m synccomplete received [3mevent[0m[2m=[0m"shutdown"
+[2m2026-09-02T07:16:01.271013Z[0m [32m INFO[0m lifecycle guard released [3mevent[0m[2m=[0m"shutdown"
+[2m2026-09-02T07:16:01.293524Z[0m [33m WARN[0m failed to install standby logind inhibitor [3merror[0m[2m=[0mplatform lifecycle error: org.freedesktop.login1.OperationInProgress: The operation inhibition has been requested for is already running [3mevent[0m[2m=[0m"shutdown"

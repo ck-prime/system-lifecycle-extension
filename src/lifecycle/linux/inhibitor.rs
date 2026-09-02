@@ -1,9 +1,15 @@
 use crate::errors::{LifecycleError, LifecycleResult};
-use crate::lifecycle::event::{LifecycleEventType, PlatformEvent};
-use std::os::unix::io::{AsRawFd, RawFd};
+use crate::lifecycle::event::LifecycleEventType;
 
 pub struct InhibitorGuard {
     fd: Option<zbus::zvariant::OwnedFd>,
+    released: bool,
+    on_release: Option<Box<dyn FnOnce() + Send>>,
+}
+
+/// Used when no logind inhibitor is available.
+/// Python still receives the event, but the OS is not held.
+pub struct NoOpGuard {
     released: bool,
 }
 
@@ -12,11 +18,26 @@ impl InhibitorGuard {
         Self {
             fd: Some(fd),
             released: false,
+            on_release: None,
         }
     }
 
-    pub fn raw_fd(&self) -> Option<RawFd> {
-        self.fd.as_ref().map(|fd| fd.as_raw_fd())
+    pub fn on_release(mut self, callback: impl FnOnce() + Send + 'static) -> Self {
+        self.on_release = Some(Box::new(callback));
+        self
+    }
+}
+
+impl NoOpGuard {
+    pub fn new() -> Self {
+        Self { released: false }
+    }
+}
+
+impl crate::lifecycle::platform::PlatformGuard for NoOpGuard {
+    fn release(&mut self) -> LifecycleResult<()> {
+        self.released = true;
+        Ok(())
     }
 }
 
@@ -27,16 +48,35 @@ impl crate::lifecycle::platform::PlatformGuard for InhibitorGuard {
         }
         self.fd.take();
         self.released = true;
+        if let Some(callback) = self.on_release.take() {
+            callback();
+        }
         Ok(())
     }
 }
 
 pub fn what_for_event(event: LifecycleEventType) -> &'static str {
     match event {
-        LifecycleEventType::Shutdown => "shutdown",
-        LifecycleEventType::Reboot => "shutdown:handle-reboot-key",
+        LifecycleEventType::Shutdown | LifecycleEventType::Reboot => "shutdown",
         LifecycleEventType::Sleep | LifecycleEventType::Hibernate => "sleep",
     }
+}
+
+pub async fn acquire_inhibitor_with_proxy(
+    proxy: &crate::lifecycle::linux::logind::ManagerProxy<'_>,
+    event: LifecycleEventType,
+) -> LifecycleResult<InhibitorGuard> {
+    let fd = proxy
+        .inhibit(
+            what_for_event(event),
+            "system-lifecycle-extension",
+            "Application synchronization in progress",
+            "delay",
+        )
+        .await
+        .map_err(|err| LifecycleError::Platform(err.to_string()))?;
+
+    Ok(InhibitorGuard::new(fd))
 }
 
 pub async fn acquire_inhibitor(
@@ -49,15 +89,5 @@ pub async fn acquire_inhibitor(
         .await
         .map_err(|err| LifecycleError::Platform(err.to_string()))?;
 
-    let fd = proxy
-        .inhibit(
-            "delay",
-            "system-lifecycle-extension",
-            "Application synchronization in progress",
-            what_for_event(event),
-        )
-        .await
-        .map_err(|err| LifecycleError::Platform(err.to_string()))?;
-
-    Ok(InhibitorGuard::new(fd))
+    acquire_inhibitor_with_proxy(&proxy, event).await
 }

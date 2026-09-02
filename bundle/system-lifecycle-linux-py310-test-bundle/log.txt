@@ -1,0 +1,20 @@
+=== lifecycle test started, timestamp=2026-09-02 07:15:07 UTC ===
+running, timestamp=2026-09-02 07:15:07 UTC pid=9243
+lifecycle listener started — log file: /home/chandranshu/learn/system-lifecycle-extension/bundle/system-lifecycle-linux-py310-test-bundle/log.txt
+Use desktop Shut Down, or: systemctl poweroff / systemctl suspend
+Then check log.txt and lifecycle_native.log after wake/reboot
+running, timestamp=2026-09-02 07:15:07 UTC
+event detected: type=sleep, os_timestamp=1788333310, now=2026-09-02 07:15:10 UTC
+waiting for 6 seconds, timestamp=2026-09-02 07:15:10 UTC
+wait complete, timestamp=2026-09-02 07:15:16 UTC
+synccomplete called, returned=True, timestamp=2026-09-02 07:15:16 UTC
+lifecycle guard released — OS may continue shutdown/sleep
+running, timestamp=2026-09-02 07:15:22 UTC
+running, timestamp=2026-09-02 07:15:32 UTC
+running, timestamp=2026-09-02 07:15:42 UTC
+running, timestamp=2026-09-02 07:15:52 UTC
+event detected: type=shutdown, os_timestamp=1788333355, now=2026-09-02 07:15:55 UTC
+waiting for 6 seconds, timestamp=2026-09-02 07:15:55 UTC
+wait complete, timestamp=2026-09-02 07:16:01 UTC
+synccomplete called, returned=True, timestamp=2026-09-02 07:16:01 UTC
+lifecycle guard released — OS may continue shutdown/sleep
